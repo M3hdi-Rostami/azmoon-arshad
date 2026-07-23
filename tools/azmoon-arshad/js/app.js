@@ -64,7 +64,7 @@ function el(tag, attrs, children) {
       else if (k === "text") node.textContent = v;
       else if (k === "html") node.innerHTML = v;
       else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
-      else node.setAttribute(k, v);
+      else if (v != null) node.setAttribute(k, v); // null/undefined یعنی «اتریبیوت گذاشته نشود» (مثل disabled)
     }
   }
   for (const child of children || []) {
