@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- کلاه فارغ‌التحصیلی (ناحیه امن آیکون تطبیقی) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,36 L82,48 L54,60 L26,48 Z" />
+    <path
+        android:fillColor="#E2F5F4"
+        android:pathData="M39,54.5 L39,64 C39,67.5 45.8,70.5 54,70.5 C62.2,70.5 69,67.5 69,64 L69,54.5 L54,61 Z" />
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M79,49.5 L79,62 C79,62 77.5,63.5 77.5,65 C77.5,66.7 78.8,68 80.5,68 C82.2,68 83.5,66.7 83.5,65 C83.5,63.5 82,62 82,62 L82,49.5 Z" />
+</vector>
