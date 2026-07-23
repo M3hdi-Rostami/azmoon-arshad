@@ -601,27 +601,30 @@ function renderExam() {
       el("div", { class: `question-text${latinQ ? " ltr" : ""}`, text: q.q }),
       ...options,
     ]),
-    el("div", { class: "exam-actions" }, [
-      el("button", {
-        class: "btn btn-outline",
-        disabled: state.currentIdx === 0 ? "disabled" : null,
-        onclick: () => { if (state.currentIdx > 0) { state.currentIdx -= 1; render(); } },
-        text: "قبلی",
-      }),
-      el("button", {
-        class: `btn btn-outline flag-btn${state.flags[state.currentIdx] ? " on" : ""}`,
-        onclick: () => { state.flags[state.currentIdx] = !state.flags[state.currentIdx]; render(); },
-        text: state.flags[state.currentIdx] ? "⚑ علامت‌دار" : "⚑ علامت‌گذاری",
-      }),
-      isLast
-        ? el("button", { class: "btn btn-primary", onclick: askFinishExam, text: "پایان آزمون" })
-        : el("button", {
-            class: "btn btn-primary",
-            onclick: () => { state.currentIdx += 1; render(); },
-            text: "بعدی",
-          }),
+    // نوار دکمه‌ها پایین صفحه فیکس است تا با کوتاه/بلند شدن سؤال‌ها جابجا نشود
+    el("div", { class: "exam-actionbar" }, [
+      el("div", { class: "exam-actions" }, [
+        el("button", {
+          class: "btn btn-outline",
+          disabled: state.currentIdx === 0 ? "disabled" : null,
+          onclick: () => { if (state.currentIdx > 0) { state.currentIdx -= 1; render(); } },
+          text: "قبلی",
+        }),
+        el("button", {
+          class: `btn btn-outline flag-btn${state.flags[state.currentIdx] ? " on" : ""}`,
+          onclick: () => { state.flags[state.currentIdx] = !state.flags[state.currentIdx]; render(); },
+          text: state.flags[state.currentIdx] ? "⚑ علامت‌دار" : "⚑ علامت‌گذاری",
+        }),
+        isLast
+          ? el("button", { class: "btn btn-primary", onclick: askFinishExam, text: "پایان آزمون" })
+          : el("button", {
+              class: "btn btn-primary",
+              onclick: () => { state.currentIdx += 1; render(); },
+              text: "بعدی",
+            }),
+      ]),
+      el("button", { class: "btn btn-danger", onclick: askFinishExam, text: "اتمام آزمون و مشاهده کارنامه" }),
     ]),
-    el("button", { class: "btn btn-danger", style: "margin-top:12px;", onclick: askFinishExam, text: "اتمام آزمون و مشاهده کارنامه" }),
   ];
 }
 
@@ -930,6 +933,7 @@ function render() {
   // ناوبری پایین در همه صفحات به‌جز حین آزمون
   const navVisible = state.screen !== "exam";
   document.body.classList.toggle("has-bottom-nav", navVisible);
+  document.body.classList.toggle("exam-mode", state.screen === "exam");
   if (navVisible) appEl.appendChild(renderBottomNav());
 
   const sheetNode = renderConfirmSheet();

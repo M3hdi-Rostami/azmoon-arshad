@@ -354,8 +354,39 @@ html, body {
 .option.wrong { border-color: var(--danger); background: var(--danger-soft); }
 .option.wrong .key { background: var(--danger); color: #fff; }
 
-.exam-actions { display: flex; gap: 8px; margin-top: 6px; }
+.exam-actions { display: flex; gap: 8px; }
 .exam-actions .btn { flex: 1; padding: 12px; font-size: 14px; }
+
+/* نوار دکمه‌های آزمون — پایین صفحه فیکس تا با طول سؤال جابجا نشود */
+.exam-actionbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: var(--max-w);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.exam-actionbar .btn { margin: 0; }
+
+/* جا برای نوار فیکس، تا آخرین گزینه پشت آن پنهان نشود */
+body.exam-mode #app {
+  padding-bottom: 160px;
+}
+
+[data-theme="light"] .exam-actionbar {
+  background: rgba(241, 245, 249, 0.92);
+  border-top-color: var(--border);
+}
 .flag-btn.on { color: var(--warn); border-color: var(--warn); }
 
 .footer-note { text-align: center; font-size: 11px; color: var(--muted-2); margin-top: auto; padding-top: 24px; line-height: 1.9; }
@@ -820,7 +851,7 @@ function el(tag, attrs, children) {
       else if (k === "text") node.textContent = v;
       else if (k === "html") node.innerHTML = v;
       else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
-      else node.setAttribute(k, v);
+      else if (v != null) node.setAttribute(k, v); // null/undefined یعنی «اتریبیوت گذاشته نشود» (مثل disabled)
     }
   }
   for (const child of children || []) {
@@ -1357,27 +1388,30 @@ function renderExam() {
       el("div", { class: `question-text${latinQ ? " ltr" : ""}`, text: q.q }),
       ...options,
     ]),
-    el("div", { class: "exam-actions" }, [
-      el("button", {
-        class: "btn btn-outline",
-        disabled: state.currentIdx === 0 ? "disabled" : null,
-        onclick: () => { if (state.currentIdx > 0) { state.currentIdx -= 1; render(); } },
-        text: "قبلی",
-      }),
-      el("button", {
-        class: `btn btn-outline flag-btn${state.flags[state.currentIdx] ? " on" : ""}`,
-        onclick: () => { state.flags[state.currentIdx] = !state.flags[state.currentIdx]; render(); },
-        text: state.flags[state.currentIdx] ? "⚑ علامت‌دار" : "⚑ علامت‌گذاری",
-      }),
-      isLast
-        ? el("button", { class: "btn btn-primary", onclick: askFinishExam, text: "پایان آزمون" })
-        : el("button", {
-            class: "btn btn-primary",
-            onclick: () => { state.currentIdx += 1; render(); },
-            text: "بعدی",
-          }),
+    // نوار دکمه‌ها پایین صفحه فیکس است تا با کوتاه/بلند شدن سؤال‌ها جابجا نشود
+    el("div", { class: "exam-actionbar" }, [
+      el("div", { class: "exam-actions" }, [
+        el("button", {
+          class: "btn btn-outline",
+          disabled: state.currentIdx === 0 ? "disabled" : null,
+          onclick: () => { if (state.currentIdx > 0) { state.currentIdx -= 1; render(); } },
+          text: "قبلی",
+        }),
+        el("button", {
+          class: `btn btn-outline flag-btn${state.flags[state.currentIdx] ? " on" : ""}`,
+          onclick: () => { state.flags[state.currentIdx] = !state.flags[state.currentIdx]; render(); },
+          text: state.flags[state.currentIdx] ? "⚑ علامت‌دار" : "⚑ علامت‌گذاری",
+        }),
+        isLast
+          ? el("button", { class: "btn btn-primary", onclick: askFinishExam, text: "پایان آزمون" })
+          : el("button", {
+              class: "btn btn-primary",
+              onclick: () => { state.currentIdx += 1; render(); },
+              text: "بعدی",
+            }),
+      ]),
+      el("button", { class: "btn btn-danger", onclick: askFinishExam, text: "اتمام آزمون و مشاهده کارنامه" }),
     ]),
-    el("button", { class: "btn btn-danger", style: "margin-top:12px;", onclick: askFinishExam, text: "اتمام آزمون و مشاهده کارنامه" }),
   ];
 }
 
@@ -1686,6 +1720,7 @@ function render() {
   // ناوبری پایین در همه صفحات به‌جز حین آزمون
   const navVisible = state.screen !== "exam";
   document.body.classList.toggle("has-bottom-nav", navVisible);
+  document.body.classList.toggle("exam-mode", state.screen === "exam");
   if (navVisible) appEl.appendChild(renderBottomNav());
 
   const sheetNode = renderConfirmSheet();
