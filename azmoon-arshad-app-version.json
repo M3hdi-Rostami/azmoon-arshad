@@ -1,8 +1,8 @@
 {
-  "version": "1.0.1",
-  "builtAt": "2026-07-23T20:51:16.344Z",
-  "apkVersionCode": 2,
-  "apkVersionName": "1.0.1",
+  "version": "1.0.2",
+  "builtAt": "2026-07-23T20:53:36.311Z",
+  "apkVersionCode": 3,
+  "apkVersionName": "1.0.2",
   "apkUrl": "https://github.com/M3hdi-Rostami/azmoon-arshad/releases/download/android-apk/azmoon-arshad.apk",
-  "apkSha256": "ce7cc274a10cffe1810842951c9f453b846cb2349dba62a4627325ba2d7ba9b8"
+  "apkSha256": "0c7fbe45515cd3a43b032e9a22291b484fed486cd72c87653c308fb906219b6f"
 }
