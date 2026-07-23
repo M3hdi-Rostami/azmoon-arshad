@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#111621">
+  <title>آزمون ارشد</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem("azmoon-arshad-theme") === "light" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <style>
+@font-face {
+  font-family: "Vazir-FD";
+  src: url("fonts/Vazir-FD.ttf") format("truetype");
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root,
+[data-theme="dark"] {
+  --bg: #111621;
+  --surface: #212833;
+  --surface-2: #1e2636;
+  --border: #2a3344;
+  --text: #ffffff;
+  --muted: #8b95a8;
+  --muted-2: #6b778c;
+  --accent: #00e5a0;
+  --accent-soft: rgba(0, 229, 160, 0.14);
+  --accent-fg: #111621;
+  --danger: #ff4d6d;
+  --danger-soft: rgba(255, 77, 109, 0.14);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251, 191, 36, 0.14);
+  --info: #60a5fa;
+  --info-soft: rgba(96, 165, 250, 0.14);
+  --max-w: 720px;
+  --border-strong: #2a3344;
+  --input-bg: #111621;
+  --update-icon-bg: rgba(0, 229, 160, 0.14);
+  --update-icon-ring: rgba(0, 229, 160, 0.08);
+  --update-icon-fg: #00e5a0;
+}
+
+[data-theme="light"] {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --muted-2: #94a3b8;
+  --accent: #059669;
+  --accent-soft: rgba(5, 150, 105, 0.12);
+  --accent-fg: #ffffff;
+  --danger: #e11d48;
+  --danger-soft: rgba(225, 29, 72, 0.1);
+  --warn: #d97706;
+  --warn-soft: rgba(217, 119, 6, 0.12);
+  --info: #2563eb;
+  --info-soft: rgba(37, 99, 235, 0.1);
+  --border-strong: #cbd5e1;
+  --input-bg: #ffffff;
+  --update-icon-bg: rgba(5, 150, 105, 0.12);
+  --update-icon-ring: rgba(5, 150, 105, 0.08);
+  --update-icon-fg: #059669;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Vazir-FD", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0 16px;
+}
+
+.topbar h1 {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.icon-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card.tappable { cursor: pointer; transition: transform 0.08s ease; }
+.card.tappable:active { transform: scale(0.98); }
+
+.group-card { display: flex; align-items: center; gap: 14px; }
+.group-card .emoji {
+  font-size: 26px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.group-card .info { flex: 1; min-width: 0; }
+.group-card .title { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.group-card .badge {
+  font-size: 10px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-weight: 700;
+}
+.group-card .desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.8; }
+.group-card .meta { font-size: 11px; color: var(--muted-2); margin-top: 6px; }
+.group-card .chev { color: var(--muted-2); font-size: 18px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.stat-box .num { font-size: 20px; font-weight: 800; color: var(--accent); }
+.stat-box .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 18px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-title .link { color: var(--accent); font-size: 12px; cursor: pointer; background: none; border: none; font-family: inherit; }
+
+.exam-card .row1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.exam-card .title { font-weight: 700; font-size: 14px; line-height: 1.8; }
+.exam-card .meta { font-size: 11.5px; color: var(--muted); margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; }
+.exam-card .best {
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.best.good { color: var(--accent); background: var(--accent-soft); }
+.best.mid { color: var(--warn); background: var(--warn-soft); }
+.best.bad { color: var(--danger); background: var(--danger-soft); }
+.best.none { color: var(--muted-2); background: var(--surface-2); }
+
+.btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-primary { background: var(--accent); color: var(--accent-fg); }
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-danger { background: var(--danger-soft); color: var(--danger); }
+.btn + .btn { margin-top: 10px; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+/* exam screen */
+.exam-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+.timer {
+  font-weight: 800;
+  font-size: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+  min-width: 86px;
+  text-align: center;
+  direction: ltr;
+}
+.timer.low { color: var(--danger); border-color: var(--danger); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.55; } }
+
+.progress-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.25s ease; }
+
+.qnav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  scrollbar-width: none;
+}
+.qnav::-webkit-scrollbar { display: none; }
+.qnav button {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+.qnav button.answered { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.qnav button.current { border-color: var(--accent); color: var(--text); }
+.qnav button.flagged::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+}
+
+.subject-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--info);
+  background: var(--info-soft);
+  border-radius: 8px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+}
+
+.reading-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 2;
+  margin-bottom: 12px;
+  direction: ltr;
+  text-align: left;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.question-text { font-size: 15px; font-weight: 700; line-height: 2.1; margin-bottom: 14px; }
+.question-text.ltr { direction: ltr; text-align: left; }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: right;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 14px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1.9;
+}
+.option .key {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.option.ltr { direction: ltr; text-align: left; }
+.option.selected { border-color: var(--accent); background: var(--accent-soft); }
+.option.selected .key { background: var(--accent); color: var(--accent-fg); border-color: transparent; }
+.option.correct { border-color: var(--accent); background: var(--accent-soft); }
+.option.correct .key { background: var(--accent); color: var(--accent-fg); }
+.option.wrong { border-color: var(--danger); background: var(--danger-soft); }
+.option.wrong .key { background: var(--danger); color: #fff; }
+
+.exam-actions { display: flex; gap: 8px; margin-top: 6px; }
+.exam-actions .btn { flex: 1; padding: 12px; font-size: 14px; }
+.flag-btn.on { color: var(--warn); border-color: var(--warn); }
+
+.footer-note { text-align: center; font-size: 11px; color: var(--muted-2); margin-top: auto; padding-top: 24px; line-height: 1.9; }
+
+/* result */
+.score-hero {
+  text-align: center;
+  padding: 26px 16px;
+}
+.score-ring {
+  width: 148px;
+  height: 148px;
+  margin: 0 auto 14px;
+  position: relative;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring .val {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+}
+.score-ring .val small { font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.score-verdict { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.score-verdict.good { color: var(--accent); }
+.score-verdict.mid { color: var(--warn); }
+.score-verdict.bad { color: var(--danger); }
+.score-sub { font-size: 12px; color: var(--muted); line-height: 1.9; }
+
+.result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.result-grid .stat-box .num { font-size: 17px; }
+.num.ok { color: var(--accent); }
+.num.bad { color: var(--danger); }
+.num.blank { color: var(--muted); }
+.num.info { color: var(--info); }
+
+.subject-row { margin-bottom: 12px; }
+.subject-row .head { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 6px; }
+.subject-row .head .pct { font-weight: 800; direction: ltr; }
+.subject-row .bar { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; direction: ltr; }
+.subject-row .bar > div { height: 100%; border-radius: 4px; }
+.subject-row .detail { font-size: 10.5px; color: var(--muted-2); margin-top: 4px; }
+
+/* review */
+.review-q { margin-bottom: 14px; }
+.review-q .qhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
+.review-q .qnum { font-size: 12px; font-weight: 700; color: var(--muted); }
+.review-status { font-size: 11px; font-weight: 700; border-radius: 8px; padding: 3px 10px; }
+.review-status.ok { color: var(--accent); background: var(--accent-soft); }
+.review-status.bad { color: var(--danger); background: var(--danger-soft); }
+.review-status.blank { color: var(--muted); background: var(--surface-2); }
+.explanation {
+  background: var(--info-soft);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--text);
+  margin-top: 4px;
+}
+.explanation b { color: var(--info); }
+
+/* history */
+.history-item .row1 { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.history-item .title { font-size: 13px; font-weight: 700; line-height: 1.8; }
+.history-item .date { font-size: 11px; color: var(--muted-2); margin-top: 4px; }
+.history-item .pct { font-size: 16px; font-weight: 800; direction: ltr; white-space: nowrap; }
+.pct.good { color: var(--accent); }
+.pct.mid { color: var(--warn); }
+.pct.bad { color: var(--danger); }
+
+.empty-note { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 16px; line-height: 2; }
+
+/* ---------- ناوبری پایین (مانند اپلیکیشن قیمت دلار و طلا) ---------- */
+
+body.has-bottom-nav #app {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+.market-bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(480px, calc(100% - 16px));
+  z-index: 4000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0;
+  padding: 10px 6px 8px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 22px;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, .45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.market-nav-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 6px 2px 4px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s, background-color 0.15s;
+}
+
+.market-nav-btn:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+}
+
+.market-nav-btn.is-active {
+  color: var(--accent);
+  background: transparent;
+}
+
+.market-nav-btn:active { transform: scale(0.96); }
+
+.market-nav-svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.market-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.market-nav-fab-wrap {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 4px 2px;
+}
+
+.market-nav-fab {
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #06b6d4));
+  color: var(--accent-fg, #111621);
+  box-shadow:
+    0 8px 24px color-mix(in srgb, var(--accent) 42%, transparent),
+    0 0 0 5px color-mix(in srgb, var(--bg) 70%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.market-nav-fab:hover { transform: translateY(-2px) scale(1.03); }
+.market-nav-fab:active { transform: scale(0.96); }
+
+.market-nav-fab svg {
+  width: 22px;
+  height: 22px;
+}
+
+[data-theme="light"] .market-bottom-nav {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+/* ---------- تب «بیشتر» (مانند اپلیکیشن قیمت دلار و طلا) ---------- */
+
+.market-more-section {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.market-more-section-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.market-more-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.market-more-section > .market-more-row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.market-more-row-static {
+  cursor: default;
+}
+
+.market-more-row-label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.market-more-row-value {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.market-more-hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted-2);
+}
+
+.market-more-copyright {
+  margin: 4px 0 0;
+  padding: 12px 4px 4px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.market-more-copyright .accent {
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---------- شیت بروزرسانی (مانند اپلیکیشن قیمت دلار و طلا) ---------- */
+
+.update-sheet-overlay { position: fixed; inset: 0; z-index: 6000; display: flex; flex-direction: column; justify-content: flex-end; pointer-events: none; }
+.update-sheet-overlay:not(.hidden) { pointer-events: auto; }
+.update-sheet-overlay.hidden { display: none; }
+.update-sheet-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease; }
+.update-sheet-overlay.open .update-sheet-backdrop { opacity: 1; }
+.update-sheet { position: relative; width: 100%; max-width: var(--max-w); margin: 0 auto; min-height: 240px; max-height: 320px; background: var(--surface); border: 1px solid var(--border-strong); border-bottom: none; border-radius: 24px 24px 0 0; box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.18); transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); display: flex; flex-direction: column; padding: 8px 22px calc(22px + env(safe-area-inset-bottom, 0px)); overflow: hidden; }
+.update-sheet::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.85; }
+.update-sheet-overlay.open .update-sheet { transform: translateY(0); }
+.update-sheet-handle { width: 40px; height: 4px; background: var(--border-strong); border-radius: 999px; margin: 4px auto 12px; flex-shrink: 0; }
+.update-sheet-content { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; min-height: 0; padding-top: 4px; }
+.update-sheet-icon-wrap { width: 64px; height: 64px; border-radius: 50%; background: var(--update-icon-ring); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.update-sheet-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--update-icon-bg); color: var(--update-icon-fg); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12); }
+.update-sheet-icon svg { width: 24px; height: 24px; display: block; }
+.update-sheet-title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.update-sheet-message { font-size: 13px; line-height: 1.75; color: var(--muted); flex: 1; max-width: 28rem; padding: 0 4px; }
+.update-sheet-actions { display: flex; gap: 10px; width: 100%; flex-shrink: 0; }
+.update-sheet-btn { flex: 1; padding: 12px 16px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: opacity 0.15s; }
+.update-sheet-btn:active { opacity: 0.85; }
+.update-sheet-btn-primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 28%, transparent); }
+
+.update-sheet-progress {
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.update-sheet-progress.hidden { display: none !important; }
+
+.update-sheet-progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+}
+
+.update-sheet-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 65%, #06b6d4));
+  transition: width 0.2s ease;
+}
+
+.update-sheet-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+#updateSheetProgressPercent {
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.update-sheet.downloading .update-sheet-actions { display: none; }
+.update-sheet.downloading .update-sheet-handle { opacity: 0.35; }
+.update-sheet-overlay.mandatory .update-sheet-backdrop { pointer-events: none; }
+
+body:has(.update-sheet-overlay.open) .market-bottom-nav {
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+/* confirm sheet */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+}
+.sheet {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+  width: 100%;
+  max-width: var(--max-w);
+  border: 1px solid var(--border);
+  border-bottom: none;
+}
+.sheet h3 { font-size: 16px; margin-bottom: 8px; }
+.sheet p { font-size: 13px; color: var(--muted); line-height: 2; margin-bottom: 16px; }
+
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="updateSheetOverlay" class="update-sheet-overlay mandatory hidden" aria-hidden="true">
+    <div id="updateSheetBackdrop" class="update-sheet-backdrop" aria-hidden="true"></div>
+    <div id="updateSheet" class="update-sheet" role="dialog" aria-modal="true" aria-labelledby="updateSheetTitle">
+      <div class="update-sheet-handle" aria-hidden="true"></div>
+      <div class="update-sheet-content">
+        <div class="update-sheet-icon-wrap" aria-hidden="true"><div class="update-sheet-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></div></div>
+        <h2 id="updateSheetTitle" class="update-sheet-title">نسخه جدید اپلیکیشن موجود است</h2>
+        <p id="updateSheetMessage" class="update-sheet-message"></p>
+        <div id="updateSheetProgress" class="update-sheet-progress hidden" aria-live="polite">
+          <div class="update-sheet-progress-track">
+            <span id="updateSheetProgressFill" class="update-sheet-progress-fill"></span>
+          </div>
+          <div class="update-sheet-progress-meta">
+            <span id="updateSheetProgressLabel">در حال دریافت بروزرسانی...</span>
+            <span id="updateSheetProgressPercent">۰٪</span>
+          </div>
+        </div>
+        <div class="update-sheet-actions" id="updateSheetActions">
+          <button type="button" id="updateSheetConfirmBtn" class="update-sheet-btn update-sheet-btn-primary">دریافت نسخه جدید</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+const QUESTION_BANK = {"version":"1.0.0","groups":[{"id":"general","title":"دروس عمومی (مشترک همه رشته‌ها)","icon":"📚","description":"زبان عمومی و استعداد تحصیلی — مشترک بین اکثر رشته‌های کارشناسی ارشد","exams":[{"id":"gen-english-1","title":"زبان عمومی ارشد — آزمون ۱ (واژگان و گرامر)","durationMinutes":20,"subjectsLabel":"واژگان، گرامر","questions":[{"subject":"واژگان","q":"The new policy will ............ small businesses that cannot afford the extra taxes.","options":["adversely affect","properly enhance","gradually promote","financially support"],"answer":0,"explanation":"adversely affect یعنی «تأثیر منفی گذاشتن». جمله می‌گوید کسب‌وکارهای کوچکی که توان پرداخت مالیات اضافه را ندارند، آسیب می‌بینند."},{"subject":"واژگان","q":"Despite years of research, scientists have not yet found a ............ cure for the disease.","options":["temporary","definitive","marginal","redundant"],"answer":1,"explanation":"definitive cure یعنی «درمان قطعی». با «با وجود سال‌ها تحقیق هنوز پیدا نشده» تنها گزینه معنادار است."},{"subject":"واژگان","q":"The lecturer's explanation was so ............ that even beginners could understand the complex theory.","options":["obscure","ambiguous","lucid","tedious"],"answer":2,"explanation":"lucid یعنی «روشن و شفاف». obscure و ambiguous یعنی مبهم و tedious یعنی خسته‌کننده که با «حتی مبتدی‌ها فهمیدند» تناقض دارند."},{"subject":"واژگان","q":"Regular exercise can significantly ............ the risk of heart disease.","options":["mitigate","aggravate","accumulate","stimulate"],"answer":0,"explanation":"mitigate یعنی «کاهش دادن، تخفیف دادن». ورزش منظم خطر بیماری قلبی را کاهش می‌دهد. aggravate یعنی تشدید کردن."},{"subject":"واژگان","q":"The two researchers reached the same conclusion ............, without knowing about each other's work.","options":["consecutively","independently","reluctantly","deliberately"],"answer":1,"explanation":"independently یعنی «مستقلاً». عبارت «بدون اطلاع از کار یکدیگر» دقیقاً همین معنا را تأیید می‌کند."},{"subject":"واژگان","q":"Water shortage is one of the most ............ problems facing the region today.","options":["trivial","obsolete","pressing","reversible"],"answer":2,"explanation":"pressing problem یعنی «مشکل مبرم و فوری». trivial یعنی جزئی و obsolete یعنی منسوخ."},{"subject":"واژگان","q":"The company decided to ............ its outdated equipment with modern machinery.","options":["replace","restore","resemble","retain"],"answer":0,"explanation":"replace ... with یعنی «جایگزین کردن با». retain یعنی نگه داشتن که متضاد منظور جمله است."},{"subject":"واژگان","q":"His argument was based on ............ evidence, so the committee rejected his proposal.","options":["compelling","conclusive","insufficient","abundant"],"answer":2,"explanation":"چون کمیته پیشنهاد را «رد کرد»، شواهد باید «ناکافی» (insufficient) بوده باشند."},{"subject":"گرامر","q":"By the time the firefighters arrived, the building ............ completely.","options":["has burned","had burned","was burning","burns"],"answer":1,"explanation":"برای عملی که قبل از عمل دیگری در گذشته کامل شده، از گذشته کامل (had + p.p.) استفاده می‌شود."},{"subject":"گرامر","q":"Not until the results were published ............ how successful the experiment had been.","options":["the researchers realized","did the researchers realize","the researchers did realize","realized the researchers"],"answer":1,"explanation":"وقتی جمله با عبارت منفی مثل Not until شروع شود، فاعل و فعل کمکی جابه‌جا می‌شوند (inversion): did the researchers realize."},{"subject":"گرامر","q":"The professor insisted that every student ............ the assignment before the deadline.","options":["submits","submitted","submit","would submit"],"answer":2,"explanation":"بعد از افعالی مانند insist، suggest و recommend در حالت subjunctive، فعل به‌صورت مصدر ساده (بدون s) می‌آید: insist that he submit."},{"subject":"گرامر","q":"............ the difficulty of the task, they managed to finish it on time.","options":["Despite of","Although","In spite of","Even though"],"answer":2,"explanation":"قبل از اسم (the difficulty) فقط In spite of یا Despite (بدون of) به کار می‌رود. Although و Even though نیاز به جمله کامل دارند."},{"subject":"گرامر","q":"The report, ............ findings were published last week, has caused much debate.","options":["which","whose","that","its"],"answer":1,"explanation":"برای نشان دادن مالکیت در جمله موصولی از whose استفاده می‌شود: گزارشی که «یافته‌هایش» منتشر شد."},{"subject":"گرامر","q":"If the samples ............ properly, the experiment would not have failed.","options":["were stored","had been stored","have been stored","would be stored"],"answer":1,"explanation":"جمله شرطی نوع سوم (گذشته غیرواقعی): If + had + p.p. در بخش شرط و would have + p.p. در جواب شرط."},{"subject":"گرامر","q":"Rarely ............ such a comprehensive study on this subject.","options":["we have seen","we see","have we seen","we saw"],"answer":2,"explanation":"قید منفی Rarely در ابتدای جمله باعث inversion می‌شود: Rarely have we seen."}]},{"id":"gen-english-2","title":"زبان عمومی ارشد — آزمون ۲ (درک مطلب و کلوز)","durationMinutes":25,"subjectsLabel":"درک مطلب، کلوز تست","readings":[{"id":"r1","title":"Reading Passage","text":"Sleep plays a vital role in learning and memory. During deep sleep, the brain consolidates information acquired during the day, transferring it from short-term to long-term storage. Studies have shown that students who sleep adequately after studying perform significantly better on tests than those who stay up all night reviewing material. Sleep deprivation, on the other hand, impairs attention, working memory, and decision-making. Researchers therefore recommend that students maintain a regular sleep schedule, especially during examination periods, rather than sacrificing sleep for extra hours of study."}],"questions":[{"subject":"درک مطلب","reading":"r1","q":"What is the main idea of the passage?","options":["Students should study more at night.","Sleep is essential for learning and memory.","Tests measure long-term memory only.","Decision-making is unrelated to sleep."],"answer":1,"explanation":"کل متن درباره نقش حیاتی خواب در یادگیری و حافظه است؛ جمله اول متن نیز دقیقاً همین را می‌گوید."},{"subject":"درک مطلب","reading":"r1","q":"According to the passage, during deep sleep the brain ............ .","options":["erases unnecessary short-term memories","moves information into long-term storage","stops processing information completely","reviews material like a student"],"answer":1,"explanation":"متن می‌گوید مغز اطلاعات را از حافظه کوتاه‌مدت به بلندمدت منتقل می‌کند (transferring it from short-term to long-term storage)."},{"subject":"درک مطلب","reading":"r1","q":"The word \"impairs\" in the passage is closest in meaning to ............ .","options":["improves","weakens","measures","restores"],"answer":1,"explanation":"impair یعنی «آسیب زدن و ضعیف کردن»؛ کم‌خوابی توجه و حافظه کاری را ضعیف می‌کند. نزدیک‌ترین واژه weakens است."},{"subject":"درک مطلب","reading":"r1","q":"What do researchers recommend to students?","options":["Staying up all night before exams","Studying only during the day","Keeping a regular sleep schedule","Avoiding tests when tired"],"answer":2,"explanation":"جمله آخر متن: پژوهشگران توصیه می‌کنند دانشجویان برنامه خواب منظم داشته باشند، به‌ویژه در ایام امتحانات."},{"subject":"درک مطلب","reading":"r1","q":"It can be inferred from the passage that an all-night study session before a test is ............ .","options":["counterproductive","unavoidable","beneficial","traditional"],"answer":0,"explanation":"متن می‌گوید دانشجویانی که می‌خوابند بهتر از شب‌بیدارها عمل می‌کنند؛ پس شب‌بیداری نتیجه معکوس دارد (counterproductive)."},{"subject":"کلوز تست","q":"Global warming is ............ considered one of the greatest threats to biodiversity.","options":["widely","narrowly","hardly","scarcely"],"answer":0,"explanation":"widely considered یعنی «به‌طور گسترده‌ای ... تلقی می‌شود» — ترکیب رایج (collocation) در انگلیسی آکادمیک."},{"subject":"کلوز تست","q":"Many species will become extinct ............ urgent measures are taken to protect their habitats.","options":["if","unless","because","since"],"answer":1,"explanation":"unless یعنی «مگر اینکه»: گونه‌ها منقرض می‌شوند مگر اینکه اقدامات فوری انجام شود."},{"subject":"کلوز تست","q":"The rate of deforestation has increased dramatically ............ the last three decades.","options":["since","over","from","until"],"answer":1,"explanation":"over the last three decades یعنی «طی سه دهه اخیر». برای بازه زمانی با حال کامل، over/during صحیح است؛ since نیاز به نقطه شروع دارد."},{"subject":"کلوز تست","q":"Scientists warn that ............ action is taken now, the damage may become irreversible.","options":["whether","however","unless","despite"],"answer":2,"explanation":"ساختار شرطی منفی: «مگر اینکه همین حالا اقدام شود، آسیب برگشت‌ناپذیر خواهد شد» — unless."},{"subject":"کلوز تست","q":"Conservation programs, ............ expensive, are essential for future generations.","options":["despite","although","because of","owing to"],"answer":1,"explanation":"although + صفت (حذف فعل to be): although (they are) expensive. despite نیاز به اسم دارد."},{"subject":"واژگان","q":"The government allocated additional funds to ............ the effects of the economic crisis.","options":["alleviate","elevate","aggravate","celebrate"],"answer":0,"explanation":"alleviate یعنی «کاستن و تسکین دادن» اثرات بحران. aggravate یعنی بدتر کردن و elevate یعنی بالا بردن."},{"subject":"واژگان","q":"Her research makes a significant ............ to our understanding of climate change.","options":["contribution","distribution","restriction","prescription"],"answer":0,"explanation":"make a contribution to یعنی «سهم و کمک به». ترکیب ثابت significant contribution بسیار پرتکرار در متون علمی است."},{"subject":"واژگان","q":"The findings of the study are ............ with previous research in this field.","options":["consistent","insistent","resistant","persistent"],"answer":0,"explanation":"consistent with یعنی «سازگار و هم‌راستا با». عبارت رایج در مقالات علمی برای تأیید نتایج قبلی."},{"subject":"واژگان","q":"Due to the ambiguity of the question, the students asked the teacher to ............ it.","options":["clarify","classify","certify","quantify"],"answer":0,"explanation":"چون سؤال مبهم (ambiguous) بود، خواستند آن را «شفاف‌سازی» کند: clarify."},{"subject":"واژگان","q":"The committee will ............ all applications and announce the results next month.","options":["evaluate","evacuate","evaporate","elaborate"],"answer":0,"explanation":"evaluate یعنی «ارزیابی کردن» درخواست‌ها. سایر گزینه‌ها (تخلیه کردن، تبخیر شدن، بسط دادن) بی‌ربط‌اند."}]},{"id":"gen-gmat-1","title":"استعداد تحصیلی — آزمون ۱","durationMinutes":30,"subjectsLabel":"درک مطلب تحلیلی، کمّی، منطقی","questions":[{"subject":"استدلال کمّی","q":"اگر قیمت کالایی ابتدا ۲۰٪ افزایش و سپس ۲۰٪ کاهش یابد، قیمت نهایی نسبت به قیمت اولیه چه تغییری کرده است؟","options":["بدون تغییر","۴٪ کاهش","۴٪ افزایش","۲٪ کاهش"],"answer":1,"explanation":"قیمت نهایی = ۱٫۲ × ۰٫۸ = ۰٫۹۶ برابر قیمت اولیه؛ یعنی ۴٪ کاهش."},{"subject":"استدلال کمّی","q":"میانگین ۵ عدد برابر ۱۲ است. اگر عدد ۳۰ به این اعداد اضافه شود، میانگین جدید چقدر است؟","options":["۱۴","۱۵","۱۶","۱۸"],"answer":1,"explanation":"مجموع ۵ عدد = ۶۰؛ با اضافه شدن ۳۰، مجموع = ۹۰ و تعداد = ۶؛ میانگین = ۹۰ ÷ ۶ = ۱۵."},{"subject":"استدلال کمّی","q":"کارگری کاری را در ۶ روز و کارگر دیگری همان کار را در ۱۲ روز انجام می‌دهد. اگر با هم کار کنند، کار در چند روز تمام می‌شود؟","options":["۹ روز","۸ روز","۴ روز","۳ روز"],"answer":2,"explanation":"نرخ کار مشترک = ۱/۶ + ۱/۱۲ = ۳/۱۲ = ۱/۴؛ پس کار در ۴ روز تمام می‌شود."},{"subject":"استدلال کمّی","q":"در دنباله ۲، ۶، ۱۲، ۲۰، ۳۰، ... جمله بعدی کدام است؟","options":["۴۰","۴۲","۴۴","۴۸"],"answer":1,"explanation":"الگوی دنباله n(n+1) است: ۱×۲=۲، ۲×۳=۶، ۳×۴=۱۲، ۴×۵=۲۰، ۵×۶=۳۰، ۶×۷=۴۲."},{"subject":"استدلال کمّی","q":"اگر ۴۰٪ عددی برابر ۶۰ باشد، ۷۵٪ همان عدد چقدر است؟","options":["۹۰","۱۰۰","۱۱۲٫۵","۱۲۰"],"answer":2,"explanation":"عدد = ۶۰ ÷ ۰٫۴ = ۱۵۰؛ پس ۷۵٪ × ۱۵۰ = ۱۱۲٫۵."},{"subject":"استدلال منطقی","q":"همه مدیران موفق، شنوندگان خوبی هستند. برخی شنوندگان خوب، سخنرانان ماهری‌اند. کدام نتیجه «قطعاً» درست است؟","options":["برخی مدیران موفق سخنران ماهرند","همه سخنرانان ماهر مدیر موفق‌اند","هیچ نتیجه قطعی درباره رابطه مدیران موفق و سخنرانان ماهر نمی‌توان گرفت","شنوندگان خوب همیشه مدیر موفق‌اند"],"answer":2,"explanation":"از «همه A، B هستند» و «برخی B، C هستند» نمی‌توان نتیجه قطعی درباره رابطه A و C گرفت؛ ممکن است اشتراک آن دو گروه از B خارج از A باشد."},{"subject":"استدلال منطقی","q":"اگر گزاره «هر دانشجوی کوشا در آزمون قبول می‌شود» درست باشد، کدام گزینه لزوماً درست است؟","options":["هر که قبول شود کوشا بوده است","هر که قبول نشود کوشا نبوده است","هر دانشجوی غیرکوشا مردود می‌شود","برخی قبول‌شدگان کوشا نیستند"],"answer":1,"explanation":"عکس نقیض گزاره شرطی همیشه هم‌ارز آن است: «اگر کوشا ⟵ قبول» هم‌ارز است با «اگر قبول نشد ⟵ کوشا نبوده»."},{"subject":"استدلال منطقی","q":"پنج نفر A، B، C، D و E در یک ردیف نشسته‌اند. C دقیقاً در وسط است، D در یکی از دو انتها نشسته و A بلافاصله سمت راست C است. اگر B کنار D نباشد، چه کسی کنار D نشسته است؟","options":["A","B","E","C"],"answer":2,"explanation":"C در جایگاه ۳ و A در جایگاه ۴ است. D در جایگاه ۱ یا ۵ است. همسایه D فقط می‌تواند از بین B و E باشد (A و C جایشان مشخص است)؛ چون B کنار D نیست، ناچار E کنار D می‌نشیند."},{"subject":"استدلال منطقی","q":"«هیچ فلزی عایق نیست. برخی مواد عایق، پلاستیکی‌اند.» کدام نتیجه معتبر است؟","options":["برخی پلاستیک‌ها فلز نیستند","هیچ پلاستیکی فلز نیست","همه پلاستیک‌ها عایق‌اند","برخی فلزات پلاستیکی‌اند"],"answer":0,"explanation":"برخی مواد پلاستیکی عایق‌اند و هیچ عایقی فلز نیست؛ پس همان «برخی پلاستیک‌ها» قطعاً فلز نیستند. تعمیم به «هیچ پلاستیکی» معتبر نیست."},{"subject":"درک مطلب تحلیلی","q":"«افزایش تعداد خودروها به‌تنهایی عامل آلودگی هوا نیست؛ کیفیت سوخت و فرسودگی ناوگان نیز نقش مهمی دارند.» نویسنده با این جمله چه چیزی را رد می‌کند؟","options":["نقش خودروها در آلودگی هوا","تک‌عاملی بودن علت آلودگی هوا","اهمیت کیفیت سوخت","لزوم نوسازی ناوگان"],"answer":1,"explanation":"قید «به‌تنهایی» نشان می‌دهد نویسنده تک‌عاملی دانستن علت آلودگی را رد می‌کند، نه اصل نقش خودروها را."},{"subject":"استدلال کمّی","q":"نسبت سن پدر به پسر ۷ به ۲ است. اگر مجموع سن آن‌ها ۵۴ سال باشد، پسر چند سال دارد؟","options":["۱۰","۱۲","۱۴","۱۶"],"answer":1,"explanation":"مجموع نسبت‌ها = ۹؛ هر واحد = ۵۴ ÷ ۹ = ۶؛ سن پسر = ۲ × ۶ = ۱۲ سال."},{"subject":"استدلال کمّی","q":"احتمال آنکه در دو بار پرتاب یک سکه سالم، حداقل یک «شیر» بیاید چقدر است؟","options":["۱/۲","۱/۴","۳/۴","۲/۳"],"answer":2,"explanation":"احتمال هیچ شیر (هر دو خط) = ۱/۴؛ پس حداقل یک شیر = ۱ − ۱/۴ = ۳/۴."},{"subject":"استدلال منطقی","q":"در یک استدلال، «تعمیم شتاب‌زده» زمانی رخ می‌دهد که ............","options":["از نمونه‌های اندک و غیرمعرف، نتیجه کلی گرفته شود","به جای نقد استدلال، شخصیت گوینده نقد شود","دو رویداد هم‌زمان، علت و معلول فرض شوند","از مرجع نامعتبر نقل قول شود"],"answer":0,"explanation":"مغالطه تعمیم شتاب‌زده (Hasty Generalization) یعنی نتیجه‌گیری کلی از نمونه‌های ناکافی. گزینه ۲ مغالطه حمله شخصی و گزینه ۳ مغالطه علت شمردن هم‌زمانی است."},{"subject":"استدلال کمّی","q":"مساحت مربعی که قطر آن ۸ سانتی‌متر است چند سانتی‌متر مربع است؟","options":["۱۶","۳۲","۶۴","۲۴"],"answer":1,"explanation":"مساحت مربع بر حسب قطر = d²/۲ = ۶۴ ÷ ۲ = ۳۲ سانتی‌متر مربع."},{"subject":"درک مطلب تحلیلی","q":"«اگر بودجه پژوهش افزایش نیابد، مهاجرت نخبگان ادامه خواهد یافت. بودجه پژوهش افزایش نیافته است.» نتیجه منطقی این دو مقدمه چیست؟","options":["مهاجرت نخبگان ادامه خواهد یافت","مهاجرت نخبگان متوقف می‌شود","بودجه پژوهش کافی است","نمی‌توان هیچ نتیجه‌ای گرفت"],"answer":0,"explanation":"قیاس استثنایی وضع مقدم (Modus Ponens): شرط «عدم افزایش بودجه» محقق شده، پس تالی یعنی «ادامه مهاجرت نخبگان» نتیجه می‌شود."}]}]},{"id":"computer","title":"مهندسی کامپیوتر","code":"کد ۱۲۷۶","icon":"💻","description":"ریاضیات، ساختمان داده و الگوریتم، سیستم‌عامل، معماری، نظریه زبان‌ها، پایگاه داده، شبکه و هوش مصنوعی","exams":[{"id":"cs-math","title":"ریاضیات (عمومی، گسسته، آمار)","durationMinutes":30,"subjectsLabel":"ریاضی عمومی، ریاضیات گسسته، آمار و احتمال","questions":[{"subject":"ریاضی عمومی","q":"حاصل حد lim(x→0) sin(3x)/x کدام است؟","options":["۰","۱","۳","بی‌نهایت"],"answer":2,"explanation":"طبق حد مشهور sin(u)/u → ۱، داریم sin(3x)/x = 3·sin(3x)/(3x) → ۳ × ۱ = ۳."},{"subject":"ریاضی عمومی","q":"مشتق تابع f(x) = x·ln(x) کدام است؟","options":["ln(x)","1 + ln(x)","1/x","x + ln(x)"],"answer":1,"explanation":"با قاعده ضرب: f′ = 1·ln(x) + x·(1/x) = ln(x) + 1."},{"subject":"ریاضی عمومی","q":"انتگرال ∫₀¹ 2x·eˣ² dx برابر است با:","options":["e − 1","e","e + 1","1"],"answer":0,"explanation":"با تغییر متغیر u = x²، du = 2x dx؛ انتگرال به ∫₀¹ eᵘ du = e − ۱ تبدیل می‌شود."},{"subject":"ریاضیات گسسته","q":"تعداد توابع پوشا (onto) از مجموعه ۳ عضوی به مجموعه ۲ عضوی کدام است؟","options":["۶","۸","۹","۲"],"answer":0,"explanation":"کل توابع = ۲³ = ۸؛ توابع غیرپوشا (تک‌مقداره) = ۲؛ پس توابع پوشا = ۸ − ۲ = ۶."},{"subject":"ریاضیات گسسته","q":"در یک گراف ساده همبند با n رأس، حداقل تعداد یال‌ها چقدر است؟","options":["n","n − 1","n(n−1)/2","n + 1"],"answer":1,"explanation":"کمترین یال برای همبندی، ساختار درخت است که دقیقاً n − ۱ یال دارد."},{"subject":"ریاضیات گسسته","q":"رابطه بازگشتی aₙ = 2aₙ₋₁ با a₀ = 3 چه جواب صریحی دارد؟","options":["aₙ = 3·2ⁿ","aₙ = 2·3ⁿ","aₙ = 6n","aₙ = 2ⁿ + 3"],"answer":0,"explanation":"هر جمله دو برابر قبلی است؛ دنباله هندسی با جمله اول ۳ و قدرنسبت ۲: aₙ = 3·2ⁿ."},{"subject":"ریاضیات گسسته","q":"تعداد جایگشت‌های حروف کلمه «MAMMAL» کدام است؟","options":["۷۲۰","۱۲۰","۶۰","۱۸۰"],"answer":2,"explanation":"۶ حرف با ۳ حرف M و ۲ حرف A: ‎6!/(3!·2!) = 720/12 = 60."},{"subject":"آمار و احتمال","q":"دو تاس سالم پرتاب می‌شوند. احتمال اینکه مجموع دو تاس ۷ شود چقدر است؟","options":["1/6","1/12","5/36","7/36"],"answer":0,"explanation":"حالات مطلوب: (۱,۶)(۲,۵)(۳,۴)(۴,۳)(۵,۲)(۶,۱) = ۶ حالت از ۳۶؛ احتمال = 6/36 = 1/6."},{"subject":"آمار و احتمال","q":"اگر X متغیر تصادفی با میانگین ۵ و واریانس ۴ باشد، واریانس 3X + 2 کدام است؟","options":["۱۲","۱۴","۳۶","۳۸"],"answer":2,"explanation":"Var(aX + b) = a²·Var(X) = ۹ × ۴ = ۳۶؛ جابه‌جایی ثابت (+۲) واریانس را تغییر نمی‌دهد."},{"subject":"آمار و احتمال","q":"در توزیع دوجمله‌ای با n = 100 و p = 0.2، میانگین تعداد موفقیت‌ها چقدر است؟","options":["۱۶","۲۰","۲۵","۸۰"],"answer":1,"explanation":"میانگین توزیع دوجمله‌ای = np = ۱۰۰ × ۰٫۲ = ۲۰."},{"subject":"ریاضی عمومی","q":"سری ∑ (1/n²) از n=1 تا بی‌نهایت ............","options":["واگراست","همگرا به π²/6 است","همگرا به ۱ است","همگرا به e است"],"answer":1,"explanation":"این سری p-سری با p = ۲ > ۱ است و همگراست؛ مقدار مشهور آن (مسئله بازل) برابر π²/6 است."},{"subject":"ریاضیات گسسته","q":"بنا بر اصل لانه کبوتری، در گروهی از حداقل چند نفر، مطمئناً دو نفر در یک ماه یکسان متولد شده‌اند؟","options":["۱۲","۱۳","۲۴","۲۵"],"answer":1,"explanation":"۱۲ ماه داریم؛ با ۱۳ نفر حتماً دست‌کم دو نفر در یک ماه مشترک متولد شده‌اند (اصل لانه کبوتری)."},{"subject":"ریاضی عمومی","q":"ماتریس A دو در دو با دترمینان ۵ است. دترمینان ماتریس 2A کدام است؟","options":["۱۰","۲۰","۲۵","۴۰"],"answer":1,"explanation":"det(kA) = kⁿ·det(A) برای ماتریس n×n؛ اینجا ۲² × ۵ = ۲۰."},{"subject":"آمار و احتمال","q":"اگر P(A) = 0.6، P(B) = 0.5 و P(A∩B) = 0.3 باشد، آیا A و B مستقل‌اند؟","options":["بله، چون P(A∩B) = P(A)·P(B)","خیر، چون P(A∩B) ≠ P(A)·P(B)","بله، چون P(A∪B) = 0.8","با این اطلاعات قابل تعیین نیست"],"answer":0,"explanation":"P(A)·P(B) = ۰٫۶ × ۰٫۵ = ۰٫۳ که دقیقاً برابر P(A∩B) است؛ پس دو پیشامد مستقل‌اند."},{"subject":"ریاضیات گسسته","q":"کدام گزاره با ¬(p ∧ q) هم‌ارز است؟","options":["¬p ∧ ¬q","¬p ∨ ¬q","p ∨ q","¬p → q"],"answer":1,"explanation":"قانون دمورگان: نقیض عطف، فصلِ نقیض‌هاست: ¬(p ∧ q) ≡ ¬p ∨ ¬q."}]},{"id":"cs-spec-1","title":"دروس تخصصی ۱ (ساختمان داده، الگوریتم، نظریه زبان‌ها)","durationMinutes":30,"subjectsLabel":"ساختمان داده، طراحی الگوریتم، نظریه زبان‌ها و ماشین‌ها","questions":[{"subject":"ساختمان داده","q":"پیچیدگی زمانی جستجو در درخت جستجوی دودویی متوازن (مانند AVL) با n گره کدام است؟","options":["O(1)","O(log n)","O(n)","O(n log n)"],"answer":1,"explanation":"در درخت متوازن ارتفاع O(log n) است و جستجو حداکثر به اندازه ارتفاع درخت مقایسه نیاز دارد."},{"subject":"ساختمان داده","q":"کدام پیمایش درخت جستجوی دودویی، کلیدها را به ترتیب صعودی تولید می‌کند؟","options":["Preorder","Postorder","Inorder","Level-order"],"answer":2,"explanation":"پیمایش میان‌ترتیب (Inorder) در BST ابتدا زیر‌درخت چپ (مقادیر کوچکتر)، سپس ریشه و بعد زیر‌درخت راست را می‌بیند؛ نتیجه مرتب صعودی است."},{"subject":"ساختمان داده","q":"در یک Max-Heap با n عنصر، حذف بزرگ‌ترین عنصر چه پیچیدگی زمانی دارد؟","options":["O(1)","O(log n)","O(n)","O(n log n)"],"answer":1,"explanation":"ریشه حذف می‌شود، آخرین عنصر به ریشه می‌آید و عمل heapify (فرو بردن) حداکثر به اندازه ارتفاع O(log n) هزینه دارد."},{"subject":"ساختمان داده","q":"برای پیاده‌سازی صف (Queue) با دو پشته (Stack)، هزینه سرشکن (amortized) هر عمل enqueue و dequeue کدام است؟","options":["O(1)","O(log n)","O(n)","O(n²)"],"answer":0,"explanation":"هر عنصر حداکثر دو بار push و دو بار pop می‌شود؛ بنابراین هزینه سرشکن هر عمل O(1) است."},{"subject":"طراحی الگوریتم","q":"پیچیدگی زمانی الگوریتم مرتب‌سازی ادغامی (Merge Sort) در بدترین حالت کدام است؟","options":["O(n)","O(n log n)","O(n²)","O(log n)"],"answer":1,"explanation":"رابطه بازگشتی T(n) = 2T(n/2) + O(n) طبق قضیه اصلی به O(n log n) می‌انجامد و به داده ورودی حساس نیست."},{"subject":"طراحی الگوریتم","q":"الگوریتم دایکسترا (Dijkstra) در چه شرایطی جواب نادرست می‌دهد؟","options":["وقتی گراف جهت‌دار باشد","وقتی گراف یال با وزن منفی داشته باشد","وقتی گراف دور داشته باشد","وقتی گراف ناهمبند باشد"],"answer":1,"explanation":"دایکسترا مبتنی بر انتخاب حریصانه است و با یال منفی ممکن است مسیر کوتاه‌تری بعداً پیدا شود؛ برای وزن منفی از بلمن-فورد استفاده می‌شود."},{"subject":"طراحی الگوریتم","q":"جواب رابطه بازگشتی T(n) = 2T(n/2) + n² طبق قضیه اصلی (Master Theorem) کدام است؟","options":["Θ(n²)","Θ(n log n)","Θ(n² log n)","Θ(n³)"],"answer":0,"explanation":"n^(log₂2) = n و f(n) = n² از آن بزرگ‌تر است (حالت سوم قضیه اصلی)؛ پس T(n) = Θ(n²)."},{"subject":"طراحی الگوریتم","q":"مسئله کوله‌پشتی صفر و یک (0/1 Knapsack) با برنامه‌ریزی پویا با ظرفیت W و n قلم چه پیچیدگی‌ای دارد؟","options":["O(n·W)","O(n log W)","O(2ⁿ)","O(n²)"],"answer":0,"explanation":"جدول DP با n سطر و W ستون پر می‌شود و هر خانه O(1) هزینه دارد؛ پیچیدگی شبه‌چندجمله‌ای O(n·W)."},{"subject":"طراحی الگوریتم","q":"کدام الگوریتم برای یافتن درخت پوشای کمینه (MST) به کار می‌رود؟","options":["دایکسترا","کروسکال","فلوید-وارشال","بلمن-فورد"],"answer":1,"explanation":"کروسکال (و همچنین پریم) الگوریتم‌های حریصانه یافتن MST هستند؛ بقیه گزینه‌ها برای کوتاه‌ترین مسیرند."},{"subject":"نظریه زبان‌ها","q":"زبان L = {aⁿbⁿ | n ≥ 0} در کدام کلاس از زبان‌ها قرار دارد؟","options":["منظم (Regular)","مستقل از متن ولی غیرمنظم","حساس به متن ولی غیرمستقل از متن","بازگشتی شمارش‌پذیر ولی غیربازگشتی"],"answer":1,"explanation":"با لم تزریق (Pumping Lemma) ثابت می‌شود منظم نیست، اما گرامر مستقل از متن S → aSb | ε آن را تولید می‌کند."},{"subject":"نظریه زبان‌ها","q":"کدام ماشین برای پذیرش زبان‌های مستقل از متن (CFL) کافی است؟","options":["اتوماتای متناهی قطعی (DFA)","اتوماتای پشته‌ای (PDA)","ماشین تورینگ با نوار محدود","اتوماتای متناهی غیرقطعی (NFA)"],"answer":1,"explanation":"زبان‌های مستقل از متن دقیقاً توسط اتوماتای پشته‌ای غیرقطعی (NPDA) پذیرفته می‌شوند؛ DFA/NFA فقط زبان‌های منظم را می‌پذیرند."},{"subject":"نظریه زبان‌ها","q":"کلاس زبان‌های منظم تحت کدام عمل «بسته نیست»؟","options":["اجتماع","مکمل","الحاق","هیچ‌کدام — تحت هر سه بسته است"],"answer":3,"explanation":"زبان‌های منظم تحت اجتماع، اشتراک، مکمل، الحاق، ستاره کلینی و معکوس همگی بسته‌اند."},{"subject":"نظریه زبان‌ها","q":"مسئله توقف (Halting Problem) چه وضعیتی دارد؟","options":["تصمیم‌پذیر است","تصمیم‌ناپذیر ولی نیمه‌تصمیم‌پذیر است","نه تصمیم‌پذیر است نه نیمه‌تصمیم‌پذیر","فقط برای ماشین‌های قطعی تصمیم‌پذیر است"],"answer":1,"explanation":"تورینگ ثابت کرد مسئله توقف تصمیم‌ناپذیر است، اما با شبیه‌سازی می‌توان توقف را در صورت رخ دادن تشخیص داد؛ پس بازگشتی شمارش‌پذیر (نیمه‌تصمیم‌پذیر) است."},{"subject":"ساختمان داده","q":"در جدول درهم‌سازی (Hash Table) با آدرس‌دهی باز و ضریب بار α، متوسط تعداد کاوش در جستجوی ناموفق حدوداً کدام است؟","options":["1/(1−α)","1/α","α","log(1/α)"],"answer":0,"explanation":"در آدرس‌دهی باز با درهم‌سازی یکنواخت، متوسط کاوش‌های جستجوی ناموفق حداکثر 1/(1−α) است."},{"subject":"طراحی الگوریتم","q":"اگر مسئله‌ای NP-Complete در زمان چندجمله‌ای حل شود، کدام نتیجه حاصل می‌شود؟","options":["P = NP","P ≠ NP","NP = EXP","هیچ نتیجه‌ای درباره P و NP نمی‌دهد"],"answer":0,"explanation":"همه مسائل NP به مسائل NP-Complete کاهش چندجمله‌ای دارند؛ حل چندجمله‌ای یکی از آن‌ها یعنی حل چندجمله‌ای همه NP، یعنی P = NP."}]},{"id":"cs-spec-2","title":"دروس تخصصی ۲ (سیستم‌عامل، معماری، شبکه، پایگاه داده، هوش)","durationMinutes":30,"subjectsLabel":"سیستم‌عامل، معماری کامپیوتر، شبکه، پایگاه داده، هوش مصنوعی","questions":[{"subject":"سیستم‌عامل","q":"کدام‌یک از شرایط چهارگانه بروز بن‌بست (Deadlock) نیست؟","options":["انحصار متقابل (Mutual Exclusion)","نگه‌داشتن و انتظار (Hold and Wait)","قبضه‌کردن منابع (Preemption)","انتظار چرخشی (Circular Wait)"],"answer":2,"explanation":"شرط لازم بن‌بست «عدم قبضه» (No Preemption) است، نه قبضه‌کردن. اگر منابع قابل پس‌گرفتن باشند بن‌بست شکل نمی‌گیرد."},{"subject":"سیستم‌عامل","q":"در زمان‌بندی CPU، الگوریتم SJF (کوتاه‌ترین کار اول) چه ویژگی‌ای دارد؟","options":["میانگین زمان انتظار را کمینه می‌کند ولی ممکن است قحطی ایجاد کند","همیشه عادلانه است و قحطی ندارد","برای سیستم‌های بلادرنگ طراحی شده است","زمان پاسخ را برای همه فرایندها برابر می‌کند"],"answer":0,"explanation":"SJF از نظر میانگین زمان انتظار بهینه است، اما فرایندهای طولانی ممکن است دچار قحطی (Starvation) شوند."},{"subject":"سیستم‌عامل","q":"در مدیریت حافظه با صفحه‌بندی، «شکست صفحه» (Page Fault) زمانی رخ می‌دهد که ............","options":["صفحه مورد نیاز در حافظه اصلی نباشد","جدول صفحات پر شود","TLB خالی باشد","قطعه‌بندی خارجی رخ دهد"],"answer":0,"explanation":"Page Fault یعنی صفحه ارجاع‌شده در حافظه فیزیکی حاضر نیست و باید از دیسک بارگذاری شود. TLB miss فقط جستجوی جدول صفحات را کند می‌کند."},{"subject":"سیستم‌عامل","q":"سمافور (Semaphore) دودویی مقداردهی‌شده با ۱، معادل کدام سازوکار است؟","options":["مانیتور","قفل انحصاری (Mutex)","پیام‌رسانی","وقفه"],"answer":1,"explanation":"سمافور دودویی با مقدار اولیه ۱ دقیقاً رفتار قفل انحصاری دارد: فقط یک فرایند وارد ناحیه بحرانی می‌شود."},{"subject":"معماری کامپیوتر","q":"در سلسله‌مراتب حافظه، اگر نرخ اصابت کش ۹۰٪، زمان دسترسی کش ۱۰ns و زمان دسترسی حافظه اصلی ۱۰۰ns باشد، متوسط زمان دسترسی (با کش پیش‌بازرس) چقدر است؟","options":["۱۹ ns","۲۰ ns","۲۸ ns","۵۵ ns"],"answer":0,"explanation":"AMAT = ۱۰ + ۰٫۱ × ۹۰ = ۱۹ns (زمان کش + نرخ خطا × جریمه خطا؛ جریمه = ۱۰۰ − ۱۰ = ۹۰)."},{"subject":"معماری کامپیوتر","q":"در خط لوله (Pipeline) پنج مرحله‌ای، مخاطره داده (Data Hazard) با کدام تکنیک کاهش می‌یابد؟","options":["پیش‌بینی پرش","میان‌گذر (Forwarding)","افزایش عمق خط لوله","کش دستورالعمل"],"answer":1,"explanation":"Forwarding/Bypassing نتیجه محاسبه‌شده را قبل از نوشتن در ثبات مستقیماً به مرحله نیازمند می‌رساند و توقف‌های ناشی از وابستگی داده را کم می‌کند."},{"subject":"معماری کامپیوتر","q":"عدد ۱۰- (منفی ده) در مبنای دو با روش مکمل ۲ و ۸ بیت چگونه نمایش داده می‌شود؟","options":["11110110","10001010","11110101","00001010"],"answer":0,"explanation":"‎+10 = 00001010؛ مکمل یک = 11110101؛ با افزودن ۱، مکمل دو = 11110110."},{"subject":"شبکه","q":"پروتکل TCP در کدام لایه از مدل OSI قرار دارد و چه نوع سرویسی ارائه می‌کند؟","options":["لایه شبکه — بدون اتصال","لایه انتقال — اتصال‌گرا و قابل اطمینان","لایه انتقال — بدون اتصال و غیرقابل اطمینان","لایه نشست — اتصال‌گرا"],"answer":1,"explanation":"TCP پروتکل لایه انتقال (لایه ۴) است؛ اتصال‌گرا با دست‌تکانی سه‌مرحله‌ای و تحویل مطمئن و مرتب داده."},{"subject":"شبکه","q":"یک شبکه با آدرس 192.168.1.0/26 حداکثر چند میزبان (Host) قابل استفاده دارد؟","options":["۶۴","۶۲","۳۰","۱۲۶"],"answer":1,"explanation":"‎/26 یعنی ۶ بیت میزبان: ۲⁶ = ۶۴ آدرس، منهای آدرس شبکه و همه‌پخشی: ۶۲ میزبان."},{"subject":"شبکه","q":"وظیفه پروتکل DNS چیست؟","options":["تبدیل نام دامنه به آدرس IP","مسیریابی بسته‌ها بین شبکه‌ها","رمزنگاری ترافیک وب","تخصیص پویا آدرس IP به میزبان‌ها"],"answer":0,"explanation":"DNS سامانه نام دامنه است و نام‌هایی مانند example.com را به آدرس IP تبدیل می‌کند. تخصیص پویا IP کار DHCP است."},{"subject":"پایگاه داده","q":"رابطه‌ای در فرم نرمال سوم (3NF) است هرگاه ............","options":["هیچ وابستگی تابعی جزئی و هیچ وابستگی تابعی تراگذری از کلید نامزد به صفت غیرکلیدی نداشته باشد","فقط وابستگی جزئی نداشته باشد","هر دترمینان آن کلید نامزد باشد","هیچ صفت چندمقداری نداشته باشد"],"answer":0,"explanation":"3NF یعنی رابطه در 2NF باشد (بدون وابستگی جزئی) و وابستگی تراگذری صفات غیرکلیدی به کلید هم نداشته باشد. گزینه ۳ تعریف BCNF و گزینه ۴ شرط 1NF است."},{"subject":"پایگاه داده","q":"در SQL کدام دستور برای حذف کامل ساختار جدول به کار می‌رود؟","options":["DELETE","TRUNCATE","DROP TABLE","REMOVE"],"answer":2,"explanation":"DROP TABLE ساختار و داده را با هم حذف می‌کند؛ DELETE و TRUNCATE فقط سطرها را پاک می‌کنند و جدول باقی می‌ماند."},{"subject":"پایگاه داده","q":"خاصیت «جداپذیری» (Isolation) در تراکنش‌ها یعنی چه؟","options":["اجرای هم‌زمان تراکنش‌ها نتیجه‌ای معادل اجرای ترتیبی داشته باشد","تراکنش یا کامل اجرا شود یا اصلاً اجرا نشود","نتایج تراکنش تأییدشده هرگز از بین نرود","پایگاه از حالت سازگار به حالت سازگار برود"],"answer":0,"explanation":"Isolation از خواص ACID است: تراکنش‌های هم‌زمان نباید در میانه کار همدیگر را ببینند. گزینه ۲ Atomicity، گزینه ۳ Durability و گزینه ۴ Consistency است."},{"subject":"هوش مصنوعی","q":"الگوریتم جستجوی A* در چه صورتی بهینه (Optimal) است؟","options":["وقتی تابع مکاشفه‌ای h هرگز هزینه واقعی را بیش‌برآورد نکند (admissible باشد)","وقتی h همیشه صفر باشد","وقتی گراف بدون دور باشد","در هر شرایطی بهینه است"],"answer":0,"explanation":"شرط بهینگی A* در جستجوی درختی، admissible بودن h است (h(n) ≤ هزینه واقعی تا هدف). با h = 0 الگوریتم به جستجوی هزینه یکنواخت تبدیل می‌شود که بهینه ولی کندتر است."},{"subject":"هوش مصنوعی","q":"در بازی دو نفره با اطلاعات کامل، هرس آلفا-بتا چه تأثیری بر نتیجه Minimax دارد؟","options":["نتیجه را تغییر نمی‌دهد، فقط گره‌های کمتری بررسی می‌شوند","نتیجه را تقریبی می‌کند","فقط در برگ‌ها صرفه‌جویی می‌کند","عمق جستجو را کاهش می‌دهد"],"answer":0,"explanation":"هرس آلفا-بتا شاخه‌هایی را که قطعاً بر تصمیم نهایی اثر ندارند حذف می‌کند؛ خروجی دقیقاً همان Minimax است با محاسبه کمتر."}]},{"id":"cs-jame","title":"آزمون جامع مهندسی کامپیوتر","durationMinutes":40,"subjectsLabel":"همه دروس — شبیه‌ساز کنکور","questions":[{"subject":"ساختمان داده","q":"تعداد درخت‌های دودویی متمایز با ۳ گره کدام است؟","options":["۳","۵","۶","۹"],"answer":1,"explanation":"تعداد درخت‌های دودویی با n گره برابر عدد کاتالان Cₙ است؛ C₃ = 5."},{"subject":"طراحی الگوریتم","q":"در جستجوی دودویی روی آرایه مرتب با ۱۰۲۴ عنصر، حداکثر چند مقایسه لازم است؟","options":["۹","۱۰","۱۱","۳۲"],"answer":2,"explanation":"حداکثر مقایسه‌ها ⌊log₂(n)⌋ + 1 = ۱۰ + ۱ = ۱۱ است (۱۰۲۴ = ۲¹⁰)."},{"subject":"سیستم‌عامل","q":"الگوریتم جایگزینی صفحه LRU کدام صفحه را بیرون می‌اندازد؟","options":["صفحه‌ای که زودتر از همه وارد شده","صفحه‌ای که دیرتر از همه استفاده شده","صفحه‌ای که مدت طولانی‌تری استفاده نشده","صفحه‌ای که کمترین دفعات استفاده را داشته"],"answer":2,"explanation":"LRU (Least Recently Used) صفحه‌ای را حذف می‌کند که از آخرین استفاده‌اش بیشترین زمان گذشته است. گزینه ۱ FIFO و گزینه ۴ LFU است."},{"subject":"معماری کامپیوتر","q":"کش با نگاشت مستقیم (Direct-Mapped) ۶۴ خط دارد و اندازه هر بلاک ۱۶ بایت است. آدرس ۳۲ بیتی چند بیت تگ (Tag) دارد؟","options":["۲۲","۲۴","۲۶","۲۰"],"answer":0,"explanation":"بیت‌های آفست = log₂16 = ۴؛ بیت‌های اندیس = log₂64 = ۶؛ تگ = ۳۲ − ۴ − ۶ = ۲۲ بیت."},{"subject":"نظریه زبان‌ها","q":"حداقل تعداد حالات DFA برای پذیرش زبان «رشته‌های دودویی که بر ۳ بخش‌پذیرند» کدام است؟","options":["۲","۳","۴","۶"],"answer":1,"explanation":"کافی است باقیمانده تقسیم عدد بر ۳ را نگه داریم: سه حالت برای باقیمانده‌های ۰، ۱ و ۲؛ حالت باقیمانده ۰ پذیرنده است."},{"subject":"شبکه","q":"در دست‌تکانی سه‌مرحله‌ای TCP، ترتیب پرچم‌ها کدام است؟","options":["SYN، SYN-ACK، ACK","ACK، SYN، FIN","SYN، ACK، FIN","SYN، RST، ACK"],"answer":0,"explanation":"کلاینت SYN می‌فرستد، سرور با SYN-ACK پاسخ می‌دهد و کلاینت با ACK اتصال را برقرار می‌کند."},{"subject":"پایگاه داده","q":"نتیجه پرس‌وجوی SELECT COUNT(*) FROM T WHERE X IS NULL چیست؟","options":["تعداد سطرهایی که X آن‌ها NULL است","همیشه صفر، چون NULL با هیچ‌چیز برابر نیست","خطای نحوی دارد","تعداد کل سطرهای جدول"],"answer":0,"explanation":"شرط IS NULL روش صحیح آزمون NULL بودن است (برخلاف = NULL که همیشه UNKNOWN می‌شود) و سطرهای دارای X تهی را می‌شمارد."},{"subject":"هوش مصنوعی","q":"جستجوی عمق‌اول (DFS) نسبت به جستجوی سطح‌اول (BFS) چه مزیتی دارد؟","options":["همیشه کوتاه‌ترین مسیر را می‌یابد","مصرف حافظه بسیار کمتری دارد","همیشه کامل است","همیشه سریع‌تر به جواب می‌رسد"],"answer":1,"explanation":"حافظه DFS خطی برحسب عمق O(bm) است در حالی که BFS حافظه نمایی O(b^d) نیاز دارد. در عوض DFS نه کامل است نه بهینه."},{"subject":"ریاضیات گسسته","q":"گراف کامل K₅ چند یال دارد؟","options":["۵","۱۰","۱۵","۲۰"],"answer":1,"explanation":"گراف کامل با n رأس n(n−1)/2 یال دارد: ۵ × ۴ ÷ ۲ = ۱۰."},{"subject":"سیستم‌عامل","q":"تفاوت اصلی نخ (Thread) و فرایند (Process) چیست؟","options":["نخ‌های یک فرایند فضای آدرس مشترک دارند ولی فرایندها جدا هستند","نخ‌ها فقط در هسته اجرا می‌شوند","فرایندها پشته مشترک دارند","نخ‌ها قابل زمان‌بندی نیستند"],"answer":0,"explanation":"نخ‌های یک فرایند حافظه (کد، داده، heap) را به اشتراک می‌گذارند و فقط پشته و ثبات‌های خود را دارند؛ فرایندها فضای آدرس مستقل دارند."},{"subject":"طراحی الگوریتم","q":"کدام روش طراحی الگوریتم برای «زیرمسئله‌های هم‌پوشان با زیرساختار بهینه» مناسب‌تر است؟","options":["تقسیم و حل","برنامه‌ریزی پویا","حریصانه","عقب‌گرد"],"answer":1,"explanation":"برنامه‌ریزی پویا نتایج زیرمسئله‌های تکراری را ذخیره می‌کند (memoization) و برای زیرمسئله‌های هم‌پوشان با زیرساختار بهینه طراحی شده است."},{"subject":"معماری کامپیوتر","q":"طبق قانون امدال (Amdahl)، اگر ۴۰٪ برنامه ۲ برابر سریع شود، شتاب کلی چقدر است؟","options":["۱٫۲۵","۱٫۶۷","۲","۱٫۴۳"],"answer":0,"explanation":"شتاب = 1 / (0.6 + 0.4/2) = 1 / 0.8 = ۱٫۲۵."},{"subject":"شبکه","q":"کدام دستگاه در لایه دوم (پیوند داده) کار می‌کند و بر اساس آدرس MAC فریم‌ها را هدایت می‌کند؟","options":["هاب","روتر","سوئیچ","تکرارکننده"],"answer":2,"explanation":"سوئیچ جدول MAC نگه می‌دارد و فریم را فقط به درگاه مقصد می‌فرستد. روتر لایه ۳ و هاب/تکرارکننده لایه ۱ هستند."},{"subject":"پایگاه داده","q":"در جبر رابطه‌ای، عملگر ⋈ (پیوند طبیعی) چه می‌کند؟","options":["سطرهای دو رابطه را بر اساس تساوی صفات هم‌نام ترکیب می‌کند","اجتماع دو رابطه را برمی‌گرداند","ستون‌های تکراری تولید می‌کند","فقط سطرهای ناسازگار را برمی‌گرداند"],"answer":0,"explanation":"پیوند طبیعی، ضرب دکارتی به‌همراه شرط تساوی صفات هم‌نام و حذف ستون تکراری است."},{"subject":"هوش مصنوعی","q":"در یادگیری ماشین، «بیش‌برازش» (Overfitting) یعنی چه؟","options":["مدل روی داده آموزش عالی ولی روی داده جدید ضعیف عمل می‌کند","مدل نه داده آموزش را یاد می‌گیرد نه تعمیم می‌دهد","مدل بیش از حد ساده است","داده آموزش بیش از حد بزرگ است"],"answer":0,"explanation":"بیش‌برازش یعنی مدل نویز داده آموزش را حفظ کرده و قدرت تعمیم به داده دیده‌نشده را از دست داده است. گزینه ۳ توصیف Underfitting است."},{"subject":"آمار و احتمال","q":"طبق قضیه بیز، اگر P(B|A) = 0.8، P(A) = 0.3 و P(B) = 0.6 باشد، P(A|B) چقدر است؟","options":["۰٫۲۴","۰٫۴","۰٫۴۸","۰٫۵"],"answer":1,"explanation":"P(A|B) = P(B|A)·P(A)/P(B) = (۰٫۸ × ۰٫۳) ÷ ۰٫۶ = ۰٫۲۴ ÷ ۰٫۶ = ۰٫۴."},{"subject":"نظریه زبان‌ها","q":"عبارت منظم (a|b)*abb چه رشته‌هایی را توصیف می‌کند؟","options":["رشته‌هایی از a و b که به abb ختم می‌شوند","رشته‌هایی که با abb شروع می‌شوند","رشته‌هایی که شامل abb نیستند","فقط رشته abb"],"answer":0,"explanation":"(a|b)* هر پیشوندی از a و b را می‌پذیرد و سپس رشته باید دقیقاً با abb تمام شود."},{"subject":"سیستم‌عامل","q":"الگوریتم بانکدار (Banker's Algorithm) برای چه منظوری استفاده می‌شود؟","options":["اجتناب از بن‌بست","تشخیص بن‌بست پس از وقوع","زمان‌بندی دیسک","مدیریت حافظه مجازی"],"answer":0,"explanation":"الگوریتم بانکدار قبل از تخصیص منبع بررسی می‌کند که آیا سیستم در حالت امن باقی می‌ماند یا نه — روش اجتناب از بن‌بست (Deadlock Avoidance)."},{"subject":"ریاضی عمومی","q":"نقطه بحرانی تابع f(x) = x³ − 3x در کدام گزینه است و چه نوعی دارد؟","options":["x = 1 کمینه نسبی و x = −1 بیشینه نسبی","x = 1 بیشینه نسبی و x = −1 کمینه نسبی","x = 0 نقطه عطف و تنها نقطه بحرانی","تابع نقطه بحرانی ندارد"],"answer":0,"explanation":"f′ = 3x² − 3 = 0 ⟵ x = ±۱؛ با f″ = 6x: در x = ۱ مثبت (کمینه) و در x = −۱ منفی (بیشینه)."},{"subject":"شبکه","q":"HTTPS از کدام پروتکل برای رمزنگاری استفاده می‌کند و روی کدام پورت پیش‌فرض کار می‌کند؟","options":["TLS — پورت ۴۴۳","SSH — پورت ۲۲","IPSec — پورت ۸۰","TLS — پورت ۸۰۸۰"],"answer":0,"explanation":"HTTPS همان HTTP روی TLS (جانشین SSL) است و پورت پیش‌فرض آن ۴۴۳ است."}]}]},{"id":"management","title":"مدیریت","code":"کد ۱۱۴۲","icon":"📊","description":"تئوری‌های مدیریت، اقتصاد خرد و کلان، بازاریابی، مالی و منابع انسانی","exams":[{"id":"mgmt-1","title":"تئوری‌های مدیریت و اقتصاد","durationMinutes":25,"subjectsLabel":"تئوری‌های مدیریت، اقتصاد خرد و کلان","questions":[{"subject":"تئوری‌های مدیریت","q":"کدام‌یک از وظایف مدیریت از دیدگاه هنری فایول نیست؟","options":["برنامه‌ریزی","سازماندهی","بازاریابی","کنترل"],"answer":2,"explanation":"وظایف پنج‌گانه فایول: برنامه‌ریزی، سازماندهی، فرماندهی، هماهنگی و کنترل. بازاریابی جزء وظایف عمومی مدیریت فایول نیست."},{"subject":"تئوری‌های مدیریت","q":"نظریه مدیریت علمی به کدام دانشمند نسبت داده می‌شود؟","options":["ماکس وبر","فردریک تیلور","التون مایو","هنری فایول"],"answer":1,"explanation":"فردریک وینسلو تیلور بنیان‌گذار مدیریت علمی است (مطالعه زمان و حرکت، استانداردسازی کار). وبر بوروکراسی و مایو نهضت روابط انسانی را بنا نهاد."},{"subject":"تئوری‌های مدیریت","q":"مطالعات هاثورن (Hawthorne) سرآغاز کدام مکتب مدیریتی بود؟","options":["مدیریت علمی","روابط انسانی","مدیریت کمّی","نظریه اقتضایی"],"answer":1,"explanation":"مطالعات هاثورن توسط التون مایو نشان داد عوامل اجتماعی و روانی بر بهره‌وری اثر دارند و مکتب روابط انسانی شکل گرفت."},{"subject":"تئوری‌های مدیریت","q":"در سلسله‌مراتب نیازهای مازلو، بالاترین سطح نیاز کدام است؟","options":["احترام","تعلق و عشق","خودشکوفایی","امنیت"],"answer":2,"explanation":"ترتیب هرم مازلو از پایین به بالا: فیزیولوژیک، امنیت، تعلق، احترام و در رأس، خودشکوفایی (Self-Actualization)."},{"subject":"تئوری‌های مدیریت","q":"طبق نظریه دو عاملی هرزبرگ، «حقوق و دستمزد» جزء کدام دسته است؟","options":["عوامل انگیزشی","عوامل بهداشتی","عوامل خودشکوفایی","عوامل رشد"],"answer":1,"explanation":"هرزبرگ حقوق، شرایط کار و روابط را «عوامل بهداشتی» می‌داند که نبودشان نارضایتی می‌آورد اما وجودشان لزوماً انگیزه ایجاد نمی‌کند؛ انگیزاننده‌ها مواردی مانند موفقیت و قدردانی‌اند."},{"subject":"تئوری‌های مدیریت","q":"«وحدت فرماندهی» یعنی چه؟","options":["هر کارمند فقط از یک مافوق دستور بگیرد","همه تصمیم‌ها در رأس سازمان گرفته شود","فرماندهی و برنامه‌ریزی یکی شود","هر مدیر فقط یک زیردست داشته باشد"],"answer":0,"explanation":"اصل وحدت فرماندهی فایول: هر کارمند باید تنها از یک رئیس دستور بگیرد تا از تعارض دستورها جلوگیری شود."},{"subject":"اقتصاد خرد","q":"اگر کشش قیمتی تقاضای کالایی برابر ۲- باشد، افزایش ۱۰٪ قیمت چه اثری بر مقدار تقاضا دارد؟","options":["۲۰٪ کاهش","۱۰٪ کاهش","۵٪ کاهش","۲۰٪ افزایش"],"answer":0,"explanation":"کشش = درصد تغییر مقدار ÷ درصد تغییر قیمت؛ پس تغییر مقدار = ۲- × ۱۰٪ = ۲۰٪ کاهش. تقاضا کشسان است."},{"subject":"اقتصاد خرد","q":"در بازار رقابت کامل، بنگاه در بلندمدت در چه نقطه‌ای تولید می‌کند؟","options":["حداقل هزینه متوسط بلندمدت (P = min LAC)","حداکثر درآمد کل","جایی که هزینه نهایی حداکثر است","P بالاتر از هزینه متوسط"],"answer":0,"explanation":"ورود و خروج آزاد بنگاه‌ها سود اقتصادی را صفر می‌کند و تعادل بلندمدت در حداقل منحنی هزینه متوسط بلندمدت شکل می‌گیرد (P = MC = min LAC)."},{"subject":"اقتصاد خرد","q":"کالای گیفن (Giffen) چه ویژگی‌ای دارد؟","options":["با افزایش قیمت، مقدار تقاضایش افزایش می‌یابد","با افزایش درآمد، تقاضایش کاهش می‌یابد ولی قانون تقاضا برقرار است","کشش قیمتی آن صفر است","کالای لوکس با کشش بالاست"],"answer":0,"explanation":"کالای گیفن استثنای قانون تقاضاست: اثر درآمدی منفی چنان قوی است که با گران شدن کالا، مصرف آن بیشتر می‌شود (کالای پست خاص)."},{"subject":"اقتصاد کلان","q":"تورم ناشی از فشار تقاضا زمانی رخ می‌دهد که ............","options":["تقاضای کل از عرضه کل در اشتغال کامل پیشی بگیرد","هزینه‌های تولید افزایش یابد","قیمت نفت جهانی بالا رود","دستمزدها به‌طور دستوری کاهش یابد"],"answer":0,"explanation":"تورم تقاضا (Demand-Pull) نتیجه فزونی تقاضای کل بر ظرفیت تولید است؛ افزایش هزینه تولید، تورم فشار هزینه (Cost-Push) ایجاد می‌کند."},{"subject":"اقتصاد کلان","q":"کدام‌یک از ابزارهای سیاست پولی انقباضی است؟","options":["افزایش نرخ ذخیره قانونی","خرید اوراق قرضه توسط بانک مرکزی","کاهش نرخ تنزیل مجدد","افزایش مخارج دولت"],"answer":0,"explanation":"افزایش نرخ ذخیره قانونی قدرت وام‌دهی بانک‌ها و حجم پول را کم می‌کند (انقباضی). خرید اوراق و کاهش نرخ تنزیل انبساطی‌اند و مخارج دولت سیاست مالی است."},{"subject":"اقتصاد کلان","q":"اگر میل نهایی به مصرف (MPC) برابر ۰٫۸ باشد، ضریب فزاینده مخارج ساده چقدر است؟","options":["۱٫۲۵","۴","۵","۸"],"answer":2,"explanation":"ضریب فزاینده = 1/(1−MPC) = 1/0.2 = ۵."},{"subject":"تئوری‌های مدیریت","q":"نظریه اقتضایی (Contingency) در مدیریت چه می‌گوید؟","options":["بهترین روش مدیریت به شرایط و موقعیت بستگی دارد","همیشه یک بهترین روش جهانی وجود دارد","ساختار سازمان باید همیشه مسطح باشد","کارکنان ذاتاً از کار بیزارند"],"answer":0,"explanation":"رویکرد اقتضایی می‌گوید هیچ نسخه واحدی برای همه سازمان‌ها وجود ندارد و شیوه مناسب تابع محیط، فناوری و اندازه سازمان است."},{"subject":"تئوری‌های مدیریت","q":"در نظریه X و Y مک‌گرگور، مفروضات نظریه Y کدام است؟","options":["کارکنان کار را طبیعی می‌دانند و خودکنترل‌اند","کارکنان ذاتاً تنبل‌اند و باید کنترل شوند","کارکنان فقط با پول انگیزه می‌گیرند","کارکنان از پذیرش مسئولیت می‌گریزند"],"answer":0,"explanation":"نظریه Y نگاه مثبت دارد: کار مانند بازی طبیعی است، افراد مسئولیت‌پذیرند و خودهدایتی دارند. گزینه‌های دیگر مفروضات نظریه X هستند."},{"subject":"اقتصاد خرد","q":"هزینه فرصت یک انتخاب چیست؟","options":["ارزش بهترین گزینه از دست رفته","مجموع همه هزینه‌های پولی","هزینه ثابت تولید","مالیات پرداختی بر انتخاب"],"answer":0,"explanation":"هزینه فرصت، ارزش بهترین جایگزینی است که به خاطر انتخاب فعلی از آن صرف‌نظر شده — مفهوم بنیادین اقتصاد."}]},{"id":"mgmt-2","title":"بازاریابی، مالی و منابع انسانی","durationMinutes":25,"subjectsLabel":"بازاریابی، مدیریت مالی، منابع انسانی، رفتار سازمانی","questions":[{"subject":"بازاریابی","q":"آمیخته بازاریابی (4P) کاتلر شامل کدام عناصر است؟","options":["محصول، قیمت، توزیع، ترویج","محصول، برنامه‌ریزی، قدرت، مردم","قیمت، تبلیغ، بسته‌بندی، موقعیت","محصول، فرایند، مردم، شواهد فیزیکی"],"answer":0,"explanation":"4P کلاسیک: Product (محصول)، Price (قیمت)، Place (توزیع) و Promotion (ترویج). گزینه ۴ عناصر مکمل 7P خدمات است."},{"subject":"بازاریابی","q":"بخش‌بندی بازار (Segmentation) یعنی چه؟","options":["تقسیم بازار به گروه‌های همگن از مشتریان با نیازهای مشابه","انتخاب قیمت برای هر محصول","تعیین شعار تبلیغاتی برند","حذف رقبا از بازار"],"answer":0,"explanation":"در فرایند STP، ابتدا بازار به بخش‌های همگن تقسیم (Segmentation)، سپس بازار هدف انتخاب (Targeting) و جایگاه‌یابی (Positioning) انجام می‌شود."},{"subject":"بازاریابی","q":"در ماتریس BCG، محصولی با سهم بازار بالا در بازاری با رشد کم چه نامیده می‌شود؟","options":["ستاره","گاو شیرده","علامت سؤال","سگ"],"answer":1,"explanation":"گاو شیرده (Cash Cow): سهم بالا در بازار کم‌رشد؛ جریان نقدی قوی تولید می‌کند. ستاره سهم و رشد بالا، سگ هر دو پایین."},{"subject":"مدیریت مالی","q":"ارزش فعلی ۱۲۱۰ تومان دریافتی دو سال بعد با نرخ تنزیل ۱۰٪ چقدر است؟","options":["۱۰۰۰ تومان","۱۱۰۰ تومان","۹۰۰ تومان","۱۲۱۰ تومان"],"answer":0,"explanation":"PV = 1210 ÷ (1.1)² = 1210 ÷ 1.21 = ۱۰۰۰ تومان."},{"subject":"مدیریت مالی","q":"اگر NPV یک طرح سرمایه‌گذاری مثبت باشد، به این معناست که ............","options":["نرخ بازده طرح از نرخ تنزیل (هزینه سرمایه) بیشتر است","طرح حتماً زیان‌ده است","دوره بازگشت سرمایه طولانی است","نرخ بازده داخلی صفر است"],"answer":0,"explanation":"NPV مثبت یعنی ارزش فعلی جریان‌های ورودی از خروجی بیشتر است و IRR بزرگ‌تر از نرخ تنزیل است؛ طرح پذیرفتنی است."},{"subject":"مدیریت مالی","q":"ریسک سیستماتیک چه نوع ریسکی است؟","options":["ریسک کل بازار که با تنوع‌بخشی حذف نمی‌شود","ریسک خاص شرکت که با تنوع‌بخشی حذف می‌شود","ریسک ورشکستگی یک صنعت خاص","ریسک عملیاتی مدیران"],"answer":0,"explanation":"ریسک سیستماتیک (بازار) از عوامل کلان مانند تورم و نرخ بهره ناشی می‌شود و متنوع‌سازی پرتفوی آن را از بین نمی‌برد؛ معیار آن بتا (β) است."},{"subject":"منابع انسانی","q":"تجزیه و تحلیل شغل (Job Analysis) مبنای کدام فعالیت‌هاست؟","options":["شرح شغل و شرایط احراز","فقط تعیین حقوق","فقط ارزیابی عملکرد","تبلیغات استخدامی"],"answer":0,"explanation":"خروجی تجزیه شغل، «شرح شغل» (وظایف) و «شرایط احراز» (مهارت‌ها) است که مبنای جذب، آموزش، ارزیابی و جبران خدمات قرار می‌گیرد."},{"subject":"منابع انسانی","q":"خطای هاله‌ای (Halo Effect) در ارزیابی عملکرد یعنی ............","options":["تعمیم یک ویژگی مثبت یا منفی به کل ارزیابی فرد","ارزیابی همه کارکنان در حد متوسط","سخت‌گیری بیش از حد ارزیاب","تأثیر رویدادهای اخیر بر ارزیابی"],"answer":0,"explanation":"در خطای هاله‌ای، یک بُعد برجسته (مثبت یا منفی) قضاوت ارزیاب درباره سایر ابعاد را تحت تأثیر قرار می‌دهد. گزینه ۲ خطای گرایش مرکزی و گزینه ۴ خطای تازگی است."},{"subject":"رفتار سازمانی","q":"طبق نظریه برابری آدامز، کارمندی که احساس بی‌عدالتی می‌کند احتمالاً ............","options":["تلاش خود را متناسب با ادراکش تغییر می‌دهد","همیشه استعفا می‌دهد","بهره‌وری‌اش حتماً بالا می‌رود","هیچ واکنشی نشان نمی‌دهد"],"answer":0,"explanation":"نظریه برابری: فرد نسبت داده/ستانده خود را با دیگران مقایسه می‌کند و در صورت نابرابری، ورودی (تلاش) یا ادراک خود را تعدیل می‌کند."},{"subject":"رفتار سازمانی","q":"در نظریه انتظار وروم، انگیزش حاصل‌ضرب کدام سه عامل است؟","options":["انتظار × وسیله × ارزش (جذابیت)","نیاز × هدف × پاداش","توانایی × فرصت × تلاش","رضایت × تعهد × وفاداری"],"answer":0,"explanation":"M = E × I × V: انتظار (تلاش به عملکرد)، وسیله‌بودن (عملکرد به پاداش) و ارزش پاداش. اگر هر عامل صفر باشد انگیزش صفر است."},{"subject":"بازاریابی","q":"بازاریابی ویروسی (Viral Marketing) به چه معناست؟","options":["انتشار پیام توسط خود مشتریان به‌صورت زنجیره‌ای","تبلیغات تلویزیونی پرتکرار","فروش مستقیم خانه‌به‌خانه","تخفیف‌های فصلی گسترده"],"answer":0,"explanation":"در بازاریابی ویروسی، پیام آن‌قدر جذاب است که کاربران خودشان آن را (اغلب در فضای مجازی) دست‌به‌دست می‌کنند؛ مانند انتشار ویروس."},{"subject":"مدیریت مالی","q":"نقطه سربه‌سر فروش شرکتی با هزینه ثابت ۲۰۰ میلیون، قیمت واحد ۵۰ هزار و هزینه متغیر واحد ۳۰ هزار تومان، چند واحد است؟","options":["۴,۰۰۰","۶,۶۶۷","۱۰,۰۰۰","۲۰,۰۰۰"],"answer":2,"explanation":"نقطه سربه‌سر = هزینه ثابت ÷ حاشیه فروش واحد = ۲۰۰,۰۰۰,۰۰۰ ÷ (۵۰,۰۰۰ − ۳۰,۰۰۰) = ۱۰,۰۰۰ واحد."},{"subject":"منابع انسانی","q":"آموزش «حین کار» (OJT) کدام مزیت را دارد؟","options":["یادگیری در شرایط واقعی شغل با هزینه کمتر","عدم نیاز به مربی","بدون هیچ ریسکی برای تولید","استانداردسازی کامل محتوا"],"answer":0,"explanation":"در OJT کارمند هنگام انجام کار واقعی و زیر نظر فرد باتجربه می‌آموزد؛ انتقال یادگیری بالا و هزینه جداگانه آموزش پایین است."},{"subject":"رفتار سازمانی","q":"«اندیشه گروهی» (Groupthink) چه زمانی رخ می‌دهد؟","options":["وقتی میل به اجماع، ارزیابی واقع‌بینانه گزینه‌ها را سرکوب کند","وقتی گروه اعضای زیادی داشته باشد","وقتی رهبر گروه دموکراتیک باشد","وقتی تعارض سازنده زیاد شود"],"answer":0,"explanation":"در گروه‌های بسیار منسجم، فشار همرنگی باعث می‌شود اعضا تردیدها را بیان نکنند و تصمیم‌های معیوب گرفته شود — پدیده گروه‌اندیشی جانیس."},{"subject":"بازاریابی","q":"ارزش ویژه برند (Brand Equity) به چه اشاره دارد؟","options":["ارزش افزوده‌ای که نام برند به محصول می‌دهد","هزینه ثبت قانونی برند","بودجه تبلیغات سالانه","تعداد شعب فروش"],"answer":0,"explanation":"ارزش ویژه برند مجموعه دارایی‌هایی مانند آگاهی، تداعی‌ها، کیفیت ادراک‌شده و وفاداری است که ارزش محصول را نزد مشتری بالا می‌برد."}]}]},{"id":"psychology","title":"روانشناسی","code":"کد ۱۱۳۳","icon":"🧠","description":"روانشناسی عمومی، رشد، بالینی، آسیب‌شناسی روانی، آمار و روش تحقیق","exams":[{"id":"psy-1","title":"روانشناسی عمومی و رشد","durationMinutes":25,"subjectsLabel":"روانشناسی عمومی، روانشناسی رشد","questions":[{"subject":"روانشناسی عمومی","q":"در شرطی‌سازی کلاسیک پاولف، غذایی که به‌طور طبیعی بزاق ترشح می‌کند چه نامیده می‌شود؟","options":["محرک شرطی","محرک غیرشرطی","پاسخ شرطی","محرک خنثی"],"answer":1,"explanation":"غذا بدون یادگیری قبلی پاسخ (ترشح بزاق) ایجاد می‌کند، پس «محرک غیرشرطی» (UCS) است. زنگ پس از همایندی، محرک شرطی می‌شود."},{"subject":"روانشناسی عمومی","q":"در شرطی‌سازی کنشگر اسکینر، «تقویت منفی» یعنی چه؟","options":["حذف محرک ناخوشایند برای افزایش رفتار","ارائه محرک ناخوشایند برای کاهش رفتار","حذف محرک خوشایند برای کاهش رفتار","همان تنبیه است"],"answer":0,"explanation":"تقویت منفی، برداشتن محرک آزارنده (مثل قطع صدای ناهنجار) است که احتمال تکرار رفتار را «افزایش» می‌دهد؛ تنبیه رفتار را کاهش می‌دهد."},{"subject":"روانشناسی عمومی","q":"کدام برنامه تقویت، مقاوم‌ترین رفتار در برابر خاموشی را ایجاد می‌کند؟","options":["نسبی متغیر","نسبی ثابت","فاصله‌ای ثابت","تقویت پیوسته"],"answer":0,"explanation":"برنامه نسبی متغیر (مانند دستگاه‌های قمار) بالاترین نرخ پاسخ و بیشترین مقاومت در برابر خاموشی را تولید می‌کند."},{"subject":"روانشناسی عمومی","q":"حافظه کوتاه‌مدت طبق پژوهش کلاسیک میلر چند ماده (Chunk) گنجایش دارد؟","options":["۳ ± ۱","۷ ± ۲","۱۰ ± ۲","۱۲ ± ۳"],"answer":1,"explanation":"جورج میلر در مقاله مشهور «عدد جادویی هفت» گنجایش حافظه کوتاه‌مدت را ۷ ± ۲ ماده اعلام کرد."},{"subject":"روانشناسی عمومی","q":"کدام ناحیه مغز نقش اصلی را در تشکیل خاطرات جدید (تحکیم حافظه آشکار) دارد؟","options":["بادامه","هیپوکامپ","مخچه","هیپوتالاموس"],"answer":1,"explanation":"هیپوکامپ در تبدیل حافظه کوتاه‌مدت به بلندمدت آشکار نقش کلیدی دارد (مورد مشهور بیمار H.M). بادامه بیشتر با حافظه هیجانی مرتبط است."},{"subject":"روانشناسی عمومی","q":"طبق نظریه فروید، بخشی از شخصیت که از «اصل واقعیت» پیروی می‌کند کدام است؟","options":["نهاد (Id)","خود (Ego)","فراخود (Superego)","ناهشیار"],"answer":1,"explanation":"خود (ایگو) میان خواسته‌های نهاد (اصل لذت) و معیارهای فراخود (اخلاق) با توجه به واقعیت میانجی‌گری می‌کند."},{"subject":"روانشناسی عمومی","q":"مکانیسم دفاعی «فرافکنی» (Projection) یعنی ............","options":["نسبت دادن احساسات ناپذیرفتنی خود به دیگران","بازگشت به رفتارهای دوره‌های قبلی رشد","توجیه منطقی رفتار نامقبول","جابه‌جایی خشم به هدف کم‌خطرتر"],"answer":0,"explanation":"در فرافکنی، فرد تکانه‌های نامقبول خود (مثل خصومت) را به دیگران نسبت می‌دهد: «او از من متنفر است» به جای «من از او متنفرم»."},{"subject":"روانشناسی رشد","q":"ترتیب صحیح مراحل رشد شناختی پیاژه کدام است؟","options":["حسی‌حرکتی، پیش‌عملیاتی، عملیات عینی، عملیات صوری","پیش‌عملیاتی، حسی‌حرکتی، عملیات عینی، عملیات صوری","حسی‌حرکتی، عملیات عینی، پیش‌عملیاتی، عملیات صوری","عملیات عینی، پیش‌عملیاتی، عملیات صوری، حسی‌حرکتی"],"answer":0,"explanation":"چهار مرحله پیاژه: حسی‌حرکتی (۰-۲)، پیش‌عملیاتی (۲-۷)، عملیات عینی (۷-۱۱) و عملیات صوری (۱۱ به بعد)."},{"subject":"روانشناسی رشد","q":"«نگهداری ذهنی» (Conservation) معمولاً در کدام مرحله پیاژه کسب می‌شود؟","options":["حسی‌حرکتی","پیش‌عملیاتی","عملیات عینی","عملیات صوری"],"answer":2,"explanation":"کودک در مرحله عملیات عینی (۷-۱۱ سالگی) درمی‌یابد که تغییر شکل ظاهری ماده، مقدار آن را تغییر نمی‌دهد."},{"subject":"روانشناسی رشد","q":"طبق نظریه اریکسون، بحران اصلی نوجوانی کدام است؟","options":["اعتماد در برابر بی‌اعتمادی","هویت در برابر سردرگمی نقش","صمیمیت در برابر انزوا","مولد بودن در برابر رکود"],"answer":1,"explanation":"مرحله پنجم اریکسون (۱۲-۱۸ سالگی): نوجوان باید به پاسخ «من کیستم» برسد؛ شکست در آن به سردرگمی نقش می‌انجامد."},{"subject":"روانشناسی رشد","q":"در آزمایش «موقعیت ناآشنا»ی اینزورث، کودکی که هنگام بازگشت مادر به او نزدیک می‌شود و آرام می‌گیرد چه سبک دلبستگی‌ای دارد؟","options":["ایمن","اجتنابی","دوسوگرا (مقاوم)","آشفته"],"answer":0,"explanation":"کودک با دلبستگی ایمن از مادر به‌عنوان پایگاه امن استفاده می‌کند؛ از جدایی ناراحت می‌شود اما در بازگشت به‌سرعت آرام می‌گیرد."},{"subject":"روانشناسی عمومی","q":"انتقال‌دهنده عصبی «دوپامین» با کدام اختلال در سطح بالا و کدام بیماری در سطح پایین مرتبط دانسته شده است؟","options":["اسکیزوفرنی — پارکینسون","افسردگی — آلزایمر","اضطراب — صرع","وسواس — میگرن"],"answer":0,"explanation":"فرضیه دوپامین: فعالیت اضافی دوپامین با علائم مثبت اسکیزوفرنی، و تخریب نورون‌های دوپامینی جسم سیاه با پارکینسون مرتبط است."},{"subject":"روانشناسی رشد","q":"منطقه تقریبی رشد (ZPD) در نظریه ویگوتسکی یعنی ............","options":["فاصله بین توانایی مستقل کودک و توانایی او با کمک دیگران","سن عقلی منهای سن تقویمی","مرحله‌ای که کودک به تفکر انتزاعی می‌رسد","دوره حساس یادگیری زبان"],"answer":0,"explanation":"ZPD فاصله بین سطح رشد فعلی (حل مسئله مستقل) و سطح رشد بالقوه (با راهنمایی بزرگسال یا همسال تواناتر) است."},{"subject":"روانشناسی عمومی","q":"خطای اسنادی بنیادی (Fundamental Attribution Error) چیست؟","options":["کم‌تخمینی عوامل موقعیتی و بیش‌تخمینی عوامل شخصیتی در تبیین رفتار دیگران","نسبت دادن موفقیت خود به شانس","پیروی از نظر اکثریت","قضاوت بر اساس اولین اطلاعات"],"answer":0,"explanation":"در تبیین رفتار دیگران، نقش موقعیت را دست‌کم و نقش ویژگی‌های شخصیتی را بیش از حد برآورد می‌کنیم."},{"subject":"روانشناسی عمومی","q":"پدیده «آسان‌سازی اجتماعی» (Social Facilitation) می‌گوید حضور دیگران ............","options":["عملکرد در تکالیف ساده/مسلط را بهبود و در تکالیف دشوار را تضعیف می‌کند","همیشه عملکرد را بهتر می‌کند","همیشه عملکرد را بدتر می‌کند","تأثیری بر عملکرد ندارد"],"answer":0,"explanation":"طبق زایونک، حضور دیگران انگیختگی را بالا می‌برد؛ انگیختگی پاسخ غالب را تقویت می‌کند که در تکالیف آسان درست و در دشوار غلط است."}]},{"id":"psy-2","title":"آسیب‌شناسی، بالینی و روش تحقیق","durationMinutes":25,"subjectsLabel":"آسیب‌شناسی روانی، روانشناسی بالینی، آمار و روش تحقیق","questions":[{"subject":"آسیب‌شناسی روانی","q":"طبق DSM-5 برای تشخیص دوره افسردگی اساسی، علائم باید حداقل چه مدت ادامه داشته باشند؟","options":["یک هفته","دو هفته","یک ماه","شش ماه"],"answer":1,"explanation":"ملاک DSM-5: حداقل ۵ علامت (شامل خلق افسرده یا بی‌لذتی) به مدت دست‌کم دو هفته و تقریباً هر روز."},{"subject":"آسیب‌شناسی روانی","q":"تفاوت اصلی اختلال دوقطبی نوع I و نوع II چیست؟","options":["نوع I دوره مانیای کامل دارد، نوع II هیپومانیا و افسردگی اساسی","نوع II شدیدتر از نوع I است","نوع I فقط افسردگی دارد","نوع II با روان‌پریشی همراه است"],"answer":0,"explanation":"برای دوقطبی I حداقل یک دوره مانیای کامل لازم است؛ در دوقطبی II هیپومانیا (خفیف‌تر) به‌همراه دوره افسردگی اساسی وجود دارد."},{"subject":"آسیب‌شناسی روانی","q":"علائم «مثبت» اسکیزوفرنی کدام‌اند؟","options":["توهم و هذیان","بی‌ارادگی و کم‌حرفی","کناره‌گیری اجتماعی و بی‌لذتی","کندی روانی-حرکتی"],"answer":0,"explanation":"علائم مثبت، افزوده‌هایی به تجربه بهنجارند: توهم، هذیان و گفتار آشفته. کاهش‌ها (بی‌ارادگی، بی‌لذتی) علائم منفی‌اند."},{"subject":"آسیب‌شناسی روانی","q":"ترس شدید و مداوم از موقعیت‌های اجتماعی به دلیل احتمال ارزیابی منفی، مشخصه کدام اختلال است؟","options":["اختلال اضطراب اجتماعی","آگورافوبیا","اختلال وحشت‌زدگی","اضطراب فراگیر"],"answer":0,"explanation":"هسته اختلال اضطراب اجتماعی (فوبی اجتماعی) ترس از قضاوت و شرمندگی در موقعیت‌های اجتماعی یا عملکردی است."},{"subject":"روانشناسی بالینی","q":"در رویکرد شناختی بک، «افکار خودآیند منفی» چه نقشی در افسردگی دارند؟","options":["میان رویداد و هیجان میانجی می‌شوند و خلق را پایین می‌آورند","فقط پیامد افسردگی‌اند و نقش علّی ندارند","تنها در روان‌پریشی دیده می‌شوند","همیشه هشیارانه انتخاب می‌شوند"],"answer":0,"explanation":"طبق مدل شناختی بک، تفسیرهای منفی خودکار از رویدادها (برخاسته از طرحواره‌ها) واسطه ایجاد و تداوم خلق افسرده‌اند و هدف اصلی CBT هستند."},{"subject":"روانشناسی بالینی","q":"«مواجهه و جلوگیری از پاسخ» (ERP) درمان انتخابی کدام اختلال است؟","options":["اختلال وسواسی-جبری","اسکیزوفرنی","اختلال دوقطبی","اختلال شخصیت پارانوئید"],"answer":0,"explanation":"در ERP بیمار با محرک وسواسی مواجه می‌شود ولی از انجام عمل اجباری بازداشته می‌شود؛ مؤثرترین درمان روانشناختی OCD."},{"subject":"روانشناسی بالینی","q":"در مصاحبه انگیزشی (Motivational Interviewing)، سبک درمانگر چگونه است؟","options":["همدلانه و مشارکتی برای برانگیختن انگیزه تغییر از درون مراجع","دستوری و مواجهه‌گرانه","کاملاً ساکت مانند روانکاوی کلاسیک","صرفاً آموزشی و سخنرانی‌محور"],"answer":0,"explanation":"مصاحبه انگیزشی (میلر و رولنیک) با همدلی، غلتیدن با مقاومت و برجسته‌سازی تعارض‌ها، «گفتار تغییر» را از خود مراجع بیرون می‌کشد."},{"subject":"آمار و روش تحقیق","q":"کدام شاخص گرایش مرکزی نسبت به داده‌های پرت (Outlier) مقاوم‌تر است؟","options":["میانگین","میانه","دامنه","واریانس"],"answer":1,"explanation":"میانه فقط به ترتیب داده‌ها وابسته است و مقادیر انتهایی بر آن اثر چندانی ندارند؛ میانگین به‌شدت از داده پرت اثر می‌پذیرد."},{"subject":"آمار و روش تحقیق","q":"خطای نوع اول (α) در آزمون فرض یعنی ............","options":["رد فرض صفر درست","پذیرش فرض صفر نادرست","انتخاب نمونه کوچک","خطای اندازه‌گیری ابزار"],"answer":0,"explanation":"خطای نوع اول یعنی نتیجه بگیریم اثری وجود دارد در حالی که واقعاً وجود ندارد (رد H₀ درست). پذیرش H₀ نادرست خطای نوع دوم (β) است."},{"subject":"آمار و روش تحقیق","q":"در توزیع نرمال استاندارد، تقریباً چند درصد داده‌ها در فاصله ±۱ انحراف معیار از میانگین قرار دارند؟","options":["۵۰٪","۶۸٪","۹۵٪","۹۹٪"],"answer":1,"explanation":"قاعده تجربی: ۶۸٪ در ±۱SD، حدود ۹۵٪ در ±۲SD و ۹۹٫۷٪ در ±۳SD."},{"subject":"آمار و روش تحقیق","q":"برای مقایسه میانگین «بیش از دو گروه مستقل» کدام آزمون مناسب است؟","options":["تحلیل واریانس یک‌راهه (ANOVA)","آزمون t مستقل","خی‌دو","همبستگی پیرسون"],"answer":0,"explanation":"ANOVA یک‌راهه میانگین سه گروه یا بیشتر را هم‌زمان مقایسه می‌کند؛ t فقط برای دو گروه است و تکرار آن خطای نوع اول را بالا می‌برد."},{"subject":"آمار و روش تحقیق","q":"ویژگی متمایزکننده «پژوهش آزمایشی واقعی» کدام است؟","options":["دست‌کاری متغیر مستقل و گمارش تصادفی آزمودنی‌ها","استفاده از پرسشنامه استاندارد","حجم نمونه بزرگ","مطالعه در محیط طبیعی"],"answer":0,"explanation":"دو رکن آزمایش واقعی: دست‌کاری فعال متغیر مستقل و گمارش تصادفی به گروه‌ها؛ بدون گمارش تصادفی، طرح شبه‌آزمایشی است."},{"subject":"آمار و روش تحقیق","q":"ضریب همبستگی ۰٫۹- بین دو متغیر نشان‌دهنده چیست؟","options":["رابطه معکوس قوی","رابطه مستقیم قوی","نبود رابطه","رابطه علت و معلولی معکوس"],"answer":0,"explanation":"علامت منفی جهت معکوس و قدر مطلق نزدیک ۱ شدت قوی را نشان می‌دهد؛ همبستگی هرگز به‌تنهایی علیت را اثبات نمی‌کند."},{"subject":"آسیب‌شناسی روانی","q":"بازگشت مکرر و ناخواسته خاطرات سانحه، کابوس و اجتناب از یادآورها، هسته کدام اختلال است؟","options":["اختلال استرس پس از سانحه (PTSD)","اختلال سازگاری","اختلال اضطراب بیماری","اختلال تبدیلی"],"answer":0,"explanation":"PTSD با چهار خوشه علائم مشخص می‌شود: تجربه مجدد (فلاش‌بک/کابوس)، اجتناب، تغییرات منفی شناختی-خلقی و برانگیختگی مفرط."},{"subject":"روانشناسی بالینی","q":"در آزمون هوش وکسلر، میانگین و انحراف معیار IQ به ترتیب کدام است؟","options":["۱۰۰ و ۱۵","۱۰۰ و ۱۰","۹۰ و ۱۵","۱۰۰ و ۲۴"],"answer":0,"explanation":"مقیاس‌های وکسلر IQ انحرافی با میانگین ۱۰۰ و انحراف معیار ۱۵ دارند (در آزمون استنفورد-بینه قدیم SD برابر ۱۶ بود)."}]}]},{"id":"law","title":"حقوق","code":"کد ۱۱۲۶","icon":"⚖️","description":"حقوق مدنی، تجارت، جزا و جرم‌شناسی، آیین دادرسی و حقوق اساسی","exams":[{"id":"law-1","title":"حقوق مدنی و تجارت","durationMinutes":25,"subjectsLabel":"حقوق مدنی، حقوق تجارت","questions":[{"subject":"حقوق مدنی","q":"طبق ماده ۱۹۰ قانون مدنی، کدام‌یک از شرایط اساسی صحت معامله نیست؟","options":["قصد طرفین و رضای آن‌ها","اهلیت طرفین","کتبی بودن قرارداد","مشروعیت جهت معامله"],"answer":2,"explanation":"شرایط ماده ۱۹۰: قصد و رضا، اهلیت، موضوع معین و مشروعیت جهت. کتبی بودن جزء شرایط عمومی صحت نیست و عقود علی‌الاصول رضایی‌اند."},{"subject":"حقوق مدنی","q":"معامله اکراهی چه وضعیتی دارد؟","options":["باطل است","غیرنافذ است و با رضای بعدی مکرَه نافذ می‌شود","صحیح و لازم است","قابل فسخ توسط طرف مقابل است"],"answer":1,"explanation":"ماده ۲۰۹ ق.م: اکراه قصد را از بین نمی‌برد بلکه رضا را معیوب می‌کند؛ پس عقد غیرنافذ است و با اجازه بعدی مکرَه تنفیذ می‌شود."},{"subject":"حقوق مدنی","q":"عقد بیع از نظر ماهیت چه نوع عقدی است؟","options":["تملیکی، معوض و لازم","عهدی، مجانی و جایز","اذنی و جایز","تملیکی و جایز"],"answer":0,"explanation":"بیع مملّک عین به عوض معلوم است (ماده ۳۳۸)؛ عقدی تملیکی، معوض و لازم که جز با خیار یا اقاله قابل انحلال نیست."},{"subject":"حقوق مدنی","q":"اگر مورد معامله هنگام عقد موجود نباشد (مثلاً خانه‌ای که قبلاً سوخته)، بیع چه حکمی دارد؟","options":["باطل است","غیرنافذ است","صحیح است","قابل فسخ است"],"answer":0,"explanation":"ماده ۳۶۱ ق.م: اگر مبیع عین معین باشد و در زمان عقد موجود نباشد، بیع باطل است؛ چون موضوع معامله وجود ندارد."},{"subject":"حقوق مدنی","q":"«خیار مجلس» تا چه زمانی برای طرفین بیع باقی است؟","options":["تا سه روز پس از عقد","مادام که متبایعین از هم جدا نشده‌اند","تا زمان تسلیم مبیع","تا پرداخت کامل ثمن"],"answer":1,"explanation":"ماده ۳۹۷ ق.م: هر یک از متبایعین بعد از عقد فی‌المجلس و مادام که متفرق نشده‌اند اختیار فسخ معامله را دارند."},{"subject":"حقوق مدنی","q":"مسئولیت مدنی مبتنی بر «اتلاف» به چه معناست؟","options":["هرکس مال غیر را تلف کند ضامن است، حتی بدون تقصیر","فقط در صورت تقصیر عمدی مسئولیت ایجاد می‌شود","مسئولیت فقط قراردادی است","تلف‌کننده فقط در صورت علم به مالکیت غیر ضامن است"],"answer":0,"explanation":"ماده ۳۲۸ ق.م: در اتلاف (تلف مستقیم)، تقصیر شرط نیست و صرف استناد تلف به فعل شخص برای ضمان کافی است؛ در تسبیب تقصیر لازم است."},{"subject":"حقوق تجارت","q":"کدام شرکت تجاری، مسئولیت شرکا در آن نامحدود و تضامنی است؟","options":["شرکت سهامی عام","شرکت با مسئولیت محدود","شرکت تضامنی","شرکت مختلط سهامی"],"answer":2,"explanation":"در شرکت تضامنی هر شریک مسئول پرداخت تمام قروض شرکت است (ماده ۱۱۶ ق.ت)؛ در سهامی و بامسئولیت محدود، مسئولیت به آورده محدود است."},{"subject":"حقوق تجارت","q":"حداقل سرمایه برای تأسیس شرکت سهامی عام طبق لایحه اصلاحی قانون تجارت چقدر است؟","options":["یک میلیون ریال","پنج میلیون ریال","ده میلیون ریال","یکصد هزار ریال"],"answer":1,"explanation":"ماده ۵ لایحه اصلاحی ۱۳۴۷: حداقل سرمایه شرکت سهامی عام پنج میلیون ریال و سهامی خاص یک میلیون ریال است."},{"subject":"حقوق تجارت","q":"دارنده چک برای استفاده از مسئولیت تضامنی ظهرنویس‌ها باید ظرف چه مدتی از تاریخ صدور، چک را به بانک ارائه کند؟","options":["۱۵ روز","۴۵ روز","دو ماه","شش ماه"],"answer":0,"explanation":"ماده ۳۱۵ ق.ت: اگر چک در همان مکان صدور قابل پرداخت باشد، دارنده باید ظرف ۱۵ روز مطالبه کند وگرنه دعوی او علیه ظهرنویس‌ها مسموع نیست (برای شهر دیگر ۴۵ روز)."},{"subject":"حقوق تجارت","q":"«برات» با قبول براتگیر چه اثری پیدا می‌کند؟","options":["براتگیر متعهد اصلی پرداخت وجه برات می‌شود","برات‌دهنده از هر مسئولیتی بری می‌شود","برات باطل می‌شود","فقط ظهرنویس مسئول می‌ماند"],"answer":0,"explanation":"با قبولی، براتگیر متعهد اصلی سند می‌شود (ماده ۲۳۰ ق.ت)؛ سایر مسئولان (برات‌دهنده و ظهرنویس‌ها) مسئولیت تضامنی خود را حفظ می‌کنند."},{"subject":"حقوق مدنی","q":"در عقد اجاره، اگر عین مستأجره در اثنای مدت بدون تقصیر مستأجر تلف شود، اجاره چه وضعی می‌یابد؟","options":["از زمان تلف باطل می‌شود","از ابتدا باطل بوده است","همچنان معتبر است و اجرت باید کامل پرداخت شود","به عقد ودیعه تبدیل می‌شود"],"answer":0,"explanation":"ماده ۴۹۶ ق.م: عقد اجاره به‌واسطه تلف شدن عین مستأجره «از تاریخ تلف» باطل می‌شود؛ اجرت نسبت به مدت باقی‌مانده قابل استرداد است."},{"subject":"حقوق تجارت","q":"تاجر ورشکسته از چه تاریخی از مداخله در اموال خود ممنوع می‌شود؟","options":["از تاریخ صدور حکم ورشکستگی","از تاریخ توقف پرداخت دیون","از تاریخ قطعیت حکم","از تاریخ مهر و موم اموال"],"answer":0,"explanation":"ماده ۴۱۸ ق.ت: تاجر ورشکسته از تاریخ صدور حکم از مداخله در تمام اموال خود ممنوع است و مدیر تصفیه قائم‌مقام او می‌شود."},{"subject":"حقوق مدنی","q":"حیازت مباحات یعنی چه و چه اثری دارد؟","options":["تصرف در اموال بدون مالک به قصد تملک که موجب مالکیت می‌شود","تصرف در اموال دولتی با اجازه دولت","استفاده از اموال عمومی بدون تملک","خرید اموال مجهول‌المالک"],"answer":0,"explanation":"ماده ۱۴۷ ق.م: هرکس مال مباح (بدون مالک) را با رعایت قوانین به قصد تملک حیازت کند، مالک آن می‌شود — از اسباب تملک است."},{"subject":"حقوق مدنی","q":"شرط «ضمان عقد» (وجه التزام) در قرارداد چه ماهیتی دارد؟","options":["تعیین قراردادی خسارت عدم انجام تعهد","شرط باطل و مبطل عقد","صرفاً تهدید بدون ضمانت اجرا","مجازات کیفری متخلف"],"answer":0,"explanation":"وجه التزام (ماده ۲۳۰ ق.م) مبلغ مقطوع خسارتی است که طرفین برای تخلف از تعهد تعیین می‌کنند؛ دادگاه نمی‌تواند متخلف را به کمتر یا بیشتر محکوم کند."},{"subject":"حقوق تجارت","q":"کدام عمل، ذاتاً تجاری (موضوعاً تجاری) محسوب می‌شود؟","options":["خرید مال منقول به قصد فروش یا اجاره","خرید خانه برای سکونت","کشاورزی شخصی","خرید مال غیرمنقول به قصد فروش"],"answer":0,"explanation":"بند ۱ ماده ۲ ق.ت: خرید یا تحصیل هر نوع مال «منقول» به قصد فروش یا اجاره، عمل تجاری ذاتی است؛ معاملات غیرمنقول تجاری محسوب نمی‌شوند (ماده ۴)."}]},{"id":"law-2","title":"حقوق جزا و حقوق اساسی","durationMinutes":25,"subjectsLabel":"حقوق جزای عمومی و اختصاصی، حقوق اساسی","questions":[{"subject":"حقوق جزا","q":"اصل «قانونی بودن جرم و مجازات» به چه معناست؟","options":["هیچ فعلی جرم نیست و هیچ مجازاتی اعمال نمی‌شود مگر به موجب قانون","هر عمل غیراخلاقی قابل مجازات است","قاضی می‌تواند بنا به عرف مجازات تعیین کند","مجازات‌ها باید فقط در قانون اساسی ذکر شوند"],"answer":0,"explanation":"اصل ۳۶ قانون اساسی و ماده ۲ ق.م.ا: جرم‌انگاری و تعیین مجازات منحصراً در صلاحیت قانون است (nullum crimen sine lege)."},{"subject":"حقوق جزا","q":"طبق قانون مجازات اسلامی ۱۳۹۲، مجازات‌های تعزیری به چند درجه تقسیم می‌شوند؟","options":["شش درجه","هفت درجه","هشت درجه","نه درجه"],"answer":2,"explanation":"ماده ۱۹ ق.م.ا ۱۳۹۲ مجازات‌های تعزیری را به هشت درجه تقسیم کرده است؛ درجه یک شدیدترین و درجه هشت خفیف‌ترین است."},{"subject":"حقوق جزا","q":"«شروع به جرم» زمانی مصداق دارد که ............","options":["مرتکب شروع به اجرای جرم کند ولی به واسطه عامل خارج از اراده‌اش قصدش معلق بماند","فقط قصد ارتکاب جرم داشته باشد","مقدمات جرم را فراهم کند","پس از اتمام جرم پشیمان شود"],"answer":0,"explanation":"ماده ۱۲۲ ق.م.ا: شروع به اجرا + عدم وقوع جرم به دلیل عامل خارج از اراده. قصد و تهیه مقدمات به‌تنهایی شروع به جرم نیست."},{"subject":"حقوق جزا","q":"کدام‌یک از عوامل «رافع مسئولیت کیفری» است؟","options":["جنون در حال ارتکاب جرم","دفاع مشروع","رضایت بزه‌دیده","امر آمر قانونی"],"answer":0,"explanation":"جنون حین ارتکاب (ماده ۱۴۹ ق.م.ا) مسئولیت کیفری را رفع می‌کند (عامل شخصی). دفاع مشروع و امر آمر از علل موجهه جرم‌اند که وصف مجرمانه را از خودِ عمل برمی‌دارند."},{"subject":"حقوق جزا","q":"تفاوت «قتل عمد» با «قتل شبه‌عمد» در چیست؟","options":["در عمد، قصد فعل و قصد نتیجه (یا فعل نوعاً کشنده) وجود دارد؛ در شبه‌عمد قصد فعل هست ولی قصد کشتن نیست و فعل نوعاً کشنده نیست","در شبه‌عمد اصلاً فعلی انجام نمی‌شود","قتل عمد فقط با سلاح گرم است","شبه‌عمد همان خطای محض است"],"answer":0,"explanation":"ماده ۲۹۰ و ۲۹۱ ق.م.ا: عمد = قصد جنایت یا فعل نوعاً کشنده؛ شبه‌عمد = قصد فعل بدون قصد نتیجه و بدون کشنده بودن نوعی (مانند خطای پزشک)."},{"subject":"حقوق جزا","q":"مجازات «معاون جرم» در جرایم تعزیری چگونه تعیین می‌شود؟","options":["یک تا دو درجه پایین‌تر از مجازات جرم ارتکابی","برابر مجازات مباشر","نصف مجازات مباشر","معاون قابل مجازات نیست"],"answer":0,"explanation":"ماده ۱۲۷ ق.م.ا: در تعزیرات، مجازات معاون یک تا دو درجه پایین‌تر از مجازات جرم ارتکابی است."},{"subject":"حقوق جزا","q":"اصل «عطف بماسبق نشدن قوانین کیفری» چه استثنایی دارد؟","options":["قانون لاحق خفیف‌تر به نفع متهم عطف بماسبق می‌شود","هیچ استثنایی ندارد","در جرایم امنیتی همیشه عطف می‌شود","فقط با موافقت دادستان عطف می‌شود"],"answer":0,"explanation":"ماده ۱۰ ق.م.ا: قوانین کیفری به گذشته تسری نمی‌یابند مگر قانون جدید به حال متهم مساعدتر باشد (قاعده قانون اخف)."},{"subject":"حقوق اساسی","q":"طبق قانون اساسی جمهوری اسلامی ایران، تفسیر قانون اساسی بر عهده کیست؟","options":["شورای نگهبان با تصویب سه‌چهارم اعضا","مجلس شورای اسلامی","دیوان عالی کشور","مجمع تشخیص مصلحت نظام"],"answer":0,"explanation":"اصل ۹۸: تفسیر قانون اساسی به عهده شورای نگهبان است که با تصویب سه‌چهارم اعضای آن انجام می‌شود. تفسیر قوانین عادی با مجلس است (اصل ۷۳)."},{"subject":"حقوق اساسی","q":"عضویت شورای نگهبان چگونه ترکیب می‌شود؟","options":["شش فقیه منصوب رهبری و شش حقوقدان به معرفی رئیس قوه قضاییه و انتخاب مجلس","دوازده فقیه منصوب رهبری","شش حقوقدان منصوب رئیس‌جمهور و شش فقیه انتخابی مجلس","دوازده حقوقدان انتخابی مردم"],"answer":0,"explanation":"اصل ۹۱: شش فقیه به انتخاب مقام رهبری و شش حقوقدان که رئیس قوه قضاییه به مجلس معرفی و مجلس انتخاب می‌کند."},{"subject":"حقوق اساسی","q":"در صورت اختلاف مجلس و شورای نگهبان که با مصلحت نظام گره خورده باشد، حل اختلاف با کدام نهاد است؟","options":["مجمع تشخیص مصلحت نظام","رهبری به‌طور مستقیم","دیوان عدالت اداری","هیئت وزیران"],"answer":0,"explanation":"اصل ۱۱۲: مجمع تشخیص مصلحت نظام برای تشخیص مصلحت در مواردی که مصوبه مجلس را شورای نگهبان خلاف شرع یا قانون اساسی بداند و مجلس بر مصوبه اصرار کند، تشکیل شده است."},{"subject":"حقوق اساسی","q":"طبق اصل ۱۱۳ قانون اساسی، پس از مقام رهبری عالی‌ترین مقام رسمی کشور کیست؟","options":["رئیس‌جمهور","رئیس مجلس","رئیس قوه قضاییه","رئیس مجمع تشخیص"],"answer":0,"explanation":"اصل ۱۱۳: پس از مقام رهبری، رئیس‌جمهور عالی‌ترین مقام رسمی کشور است و مسئولیت اجرای قانون اساسی و ریاست قوه مجریه را بر عهده دارد."},{"subject":"حقوق جزا","q":"«مرور زمان تعقیب» در جرایم تعزیری چه اثری دارد؟","options":["پس از گذشت مواعد قانونی، تعقیب متهم موقوف می‌شود","مجازات را تشدید می‌کند","فقط در جرایم حدی اعمال می‌شود","هیچ اثری در حقوق ایران ندارد"],"answer":0,"explanation":"ماده ۱۰۵ ق.م.ا: مرور زمان در جرایم تعزیری، تعقیب را پس از گذشت مدت‌های مقرر (بسته به درجه جرم) موقوف می‌کند؛ حدود و قصاص مشمول مرور زمان نیستند."},{"subject":"حقوق اساسی","q":"اصل «برائت» در قانون اساسی به چه معناست؟","options":["اصل بر برائت است و هیچ‌کس مجرم شناخته نمی‌شود مگر جرم او در دادگاه صالح ثابت شود","همه متهمان باید بازداشت شوند تا بی‌گناهی‌شان ثابت شود","اثبات بی‌گناهی بر عهده متهم است","برائت فقط در امور مدنی جاری است"],"answer":0,"explanation":"اصل ۳۷ قانون اساسی: اصل، برائت است و هیچ‌کس از نظر قانون مجرم شناخته نمی‌شود مگر اینکه جرم او در دادگاه صالح اثبات گردد."},{"subject":"حقوق جزا","q":"کدام مجازات از مجازات‌های «حدی» است؟","options":["حد سرقت","جزای نقدی تعزیری","شلاق تعزیری","حبس درجه پنج"],"answer":0,"explanation":"حد مجازاتی است که موجب، نوع، میزان و کیفیت آن در شرع تعیین شده (ماده ۱۵ ق.م.ا)؛ مانند حد سرقت، زنا و قذف. بقیه گزینه‌ها تعزیری‌اند."},{"subject":"حقوق اساسی","q":"وضع عادی قوانین در جمهوری اسلامی ایران بر عهده کدام نهاد است؟","options":["مجلس شورای اسلامی با نظارت شورای نگهبان","هیئت وزیران","قوه قضاییه","شورای عالی امنیت ملی"],"answer":0,"explanation":"اصل ۵۸ و ۷۱: اعمال قوه مقننه از طریق مجلس شورای اسلامی است و مصوبات آن با نظارت شورای نگهبان (اصل ۹۴) اعتبار می‌یابد."}]}]}]};
+const APP_UPDATE_CONFIG = {"repoOwner":"M3hdi-Rostami","repoName":"azmoon-arshad","branch":"main","currentVersion":"1.0.1"};
+
+/* اپلیکیشن آزمون چهارگزینه‌ای کارشناسی ارشد
+ * QUESTION_BANK به‌صورت سراسری توسط اسکریپت بیلد تزریق می‌شود.
+ * نمره‌دهی مطابق کنکور سراسری: هر پاسخ غلط یک‌سوم نمره منفی دارد.
+ */
+
+const RESULTS_KEY = "azmoon-arshad-results";
+const THEME_KEY = "azmoon-arshad-theme";
+const APP_TITLE = "آزمون ارشد";
+
+const appEl = document.getElementById("app");
+
+const state = {
+  screen: "home", // home | group | exam | result | review | history | stats | more
+  groupId: null,
+  examId: null,
+  answers: [],
+  flags: [],
+  currentIdx: 0,
+  remainingSec: 0,
+  timerHandle: null,
+  result: null, // نتیجه آزمونی که همین حالا تمام شد یا از تاریخچه باز شده
+  confirmSheet: null,
+  customExam: null, // آزمون سریع (ترکیبی) ساخته‌شده در لحظه
+};
+
+/* ---------- ابزارهای کمکی ---------- */
+
+const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+function faNum(value) {
+  return String(value).replace(/\d/g, (d) => FA_DIGITS[Number(d)]);
+}
+
+function formatClock(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+function formatPercent(p) {
+  const rounded = Math.round(p * 10) / 10;
+  return `${faNum(rounded)}٪`;
+}
+
+function formatDate(ts) {
+  try {
+    return new Intl.DateTimeFormat("fa-IR", {
+      year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit",
+    }).format(new Date(ts));
+  } catch (e) {
+    return new Date(ts).toLocaleString();
+  }
+}
+
+function isMostlyLatin(text) {
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  return latin > text.length * 0.3;
+}
+
+function el(tag, attrs, children) {
+  const node = document.createElement(tag);
+  if (attrs) {
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") node.className = v;
+      else if (k === "text") node.textContent = v;
+      else if (k === "html") node.innerHTML = v;
+      else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
+      else node.setAttribute(k, v);
+    }
+  }
+  for (const child of children || []) {
+    if (child == null) continue;
+    node.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
+  }
+  return node;
+}
+
+function findGroup(groupId) {
+  return QUESTION_BANK.groups.find((g) => g.id === groupId) || null;
+}
+
+function findExam(examId) {
+  if (state.customExam && state.customExam.id === examId) {
+    return { group: { id: "quick", title: "آزمون سریع" }, exam: state.customExam };
+  }
+  for (const group of QUESTION_BANK.groups) {
+    const exam = (group.exams || []).find((e) => e.id === examId);
+    if (exam) return { group, exam };
+  }
+  return null;
+}
+
+/** ساخت آزمون سریع: سؤالات تصادفی از کل بانک سؤالات */
+function buildQuickExam(count) {
+  const pool = [];
+  for (const group of QUESTION_BANK.groups) {
+    for (const exam of group.exams) {
+      for (const q of exam.questions) {
+        if (q.reading) continue; // سؤالات وابسته به متن، بدون متن معنا ندارند
+        pool.push(q);
+      }
+    }
+  }
+  // برداشتن تصادفی (Fisher–Yates روی نمونه)
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return {
+    id: `quick-${Date.now()}`,
+    title: "آزمون سریع (ترکیبی از همه دروس)",
+    durationMinutes: 25,
+    subjectsLabel: "منتخب تصادفی از کل بانک سؤالات",
+    questions: pool.slice(0, count),
+  };
+}
+
+function startQuickExam() {
+  state.customExam = buildQuickExam(20);
+  startExam(state.customExam.id);
+}
+
+/* ---------- ذخیره و بازیابی نتایج ---------- */
+
+function loadResults() {
+  try {
+    const raw = localStorage.getItem(RESULTS_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveResult(result) {
+  const list = loadResults();
+  list.unshift(result);
+  try {
+    localStorage.setItem(RESULTS_KEY, JSON.stringify(list.slice(0, 200)));
+  } catch (e) { /* حافظه پر */ }
+}
+
+function bestScoreFor(examId) {
+  const scores = loadResults().filter((r) => r.examId === examId).map((r) => r.percent);
+  return scores.length ? Math.max(...scores) : null;
+}
+
+/* ---------- نمره‌دهی کنکوری ---------- */
+
+function scoreExam(exam, answers) {
+  let correct = 0;
+  let wrong = 0;
+  let blank = 0;
+  const subjects = {};
+
+  exam.questions.forEach((q, i) => {
+    const subj = subjects[q.subject] || (subjects[q.subject] = { correct: 0, wrong: 0, blank: 0, total: 0 });
+    subj.total += 1;
+    const a = answers[i];
+    if (a == null) {
+      blank += 1;
+      subj.blank += 1;
+    } else if (a === q.answer) {
+      correct += 1;
+      subj.correct += 1;
+    } else {
+      wrong += 1;
+      subj.wrong += 1;
+    }
+  });
+
+  const total = exam.questions.length;
+  // فرمول درصد کنکور: (صحیح×۳ − غلط) ÷ (کل×۳) ×۱۰۰ — حداقل صفر نمایش داده نمی‌شود تا واقعی بماند
+  const rawPercent = ((correct * 3 - wrong) / (total * 3)) * 100;
+  const percent = Math.round(rawPercent * 10) / 10;
+
+  const subjectRows = Object.entries(subjects).map(([name, s]) => ({
+    name,
+    ...s,
+    percent: Math.round(((s.correct * 3 - s.wrong) / (s.total * 3)) * 1000) / 10,
+  }));
+
+  return { correct, wrong, blank, total, percent, subjects: subjectRows };
+}
+
+function verdictFor(percent) {
+  if (percent >= 60) return { cls: "good", label: "عالی! در تراز رتبه‌های برتر کنکور ارشد", icon: "🏆" };
+  if (percent >= 40) return { cls: "good", label: "خیلی خوب — در محدوده قبولی رشته‌های خوب", icon: "✅" };
+  if (percent >= 20) return { cls: "mid", label: "قابل قبول — با تمرین بیشتر به تراز قبولی می‌رسید", icon: "📈" };
+  return { cls: "bad", label: "نیاز به مطالعه بیشتر — مرور پاسخ‌های تشریحی را از دست ندهید", icon: "📚" };
+}
+
+function pctClass(p) {
+  if (p >= 40) return "good";
+  if (p >= 20) return "mid";
+  return "bad";
+}
+
+/* ---------- تم ---------- */
+
+function currentTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark";
+  } catch (e) {
+    return "dark";
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.style.colorScheme = theme;
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* - */ }
+  if (window.AndroidTheme && window.AndroidTheme.onThemeChanged) {
+    try { window.AndroidTheme.onThemeChanged(theme); } catch (e) { /* - */ }
+  }
+}
+
+function toggleTheme() {
+  applyTheme(currentTheme() === "light" ? "dark" : "light");
+  render();
+}
+
+/* ---------- تایمر آزمون ---------- */
+
+function stopTimer() {
+  if (state.timerHandle) {
+    clearInterval(state.timerHandle);
+    state.timerHandle = null;
+  }
+}
+
+function startTimer() {
+  stopTimer();
+  state.timerHandle = setInterval(() => {
+    state.remainingSec -= 1;
+    const timerEl = document.getElementById("examTimer");
+    if (timerEl) {
+      timerEl.textContent = formatClock(Math.max(0, state.remainingSec));
+      timerEl.classList.toggle("low", state.remainingSec <= 60);
+    }
+    if (state.remainingSec <= 0) {
+      finishExam(true);
+    }
+  }, 1000);
+}
+
+/* ---------- جریان آزمون ---------- */
+
+function startExam(examId) {
+  const found = findExam(examId);
+  if (!found) return;
+  state.screen = "exam";
+  state.groupId = found.group.id;
+  state.examId = examId;
+  state.answers = new Array(found.exam.questions.length).fill(null);
+  state.flags = new Array(found.exam.questions.length).fill(false);
+  state.currentIdx = 0;
+  state.remainingSec = (found.exam.durationMinutes || 20) * 60;
+  state.result = null;
+  startTimer();
+  render();
+}
+
+function finishExam(timedOut) {
+  const found = findExam(state.examId);
+  if (!found) return;
+  stopTimer();
+  const score = scoreExam(found.exam, state.answers);
+  const isQuick = found.exam.id.indexOf("quick-") === 0;
+  const result = {
+    id: `r-${Date.now()}`,
+    examId: found.exam.id,
+    examTitle: found.exam.title,
+    groupTitle: found.group.title,
+    date: Date.now(),
+    timedOut: !!timedOut,
+    answers: state.answers.slice(),
+    // برای آزمون سریع، سؤالات را داخل نتیجه ذخیره می‌کنیم تا مرور بعدی ممکن باشد
+    ...(isQuick ? { questionsSnapshot: found.exam.questions } : {}),
+    ...score,
+  };
+  saveResult(result);
+  state.result = result;
+  state.screen = "result";
+  state.confirmSheet = null;
+  render();
+}
+
+function askFinishExam() {
+  const unanswered = state.answers.filter((a) => a == null).length;
+  state.confirmSheet = {
+    title: "پایان آزمون",
+    message: unanswered > 0
+      ? `هنوز ${faNum(unanswered)} سؤال بی‌پاسخ دارید (بی‌پاسخ نمره منفی ندارد). آزمون تمام شود؟`
+      : "همه سؤالات را پاسخ داده‌اید. آزمون تمام شود و کارنامه صادر شود؟",
+    confirmLabel: "بله، پایان آزمون",
+    onConfirm: () => finishExam(false),
+  };
+  render();
+}
+
+function askExitExam() {
+  state.confirmSheet = {
+    title: "خروج از آزمون",
+    message: "اگر خارج شوید پاسخ‌های این آزمون ذخیره نمی‌شود. مطمئن هستید؟",
+    confirmLabel: "بله، خروج",
+    danger: true,
+    onConfirm: () => {
+      stopTimer();
+      state.confirmSheet = null;
+      goToGroup(state.groupId);
+    },
+  };
+  render();
+}
+
+/* ---------- ناوبری ---------- */
+
+function goHome() {
+  stopTimer();
+  state.screen = "home";
+  state.groupId = null;
+  state.examId = null;
+  state.result = null;
+  state.confirmSheet = null;
+  render();
+}
+
+function goToGroup(groupId) {
+  stopTimer();
+  state.screen = "group";
+  state.groupId = groupId;
+  state.confirmSheet = null;
+  render();
+}
+
+function goToHistory() {
+  stopTimer();
+  state.screen = "history";
+  state.confirmSheet = null;
+  render();
+}
+
+function goToStats() {
+  stopTimer();
+  state.screen = "stats";
+  state.confirmSheet = null;
+  render();
+}
+
+function goToMore() {
+  stopTimer();
+  state.screen = "more";
+  state.confirmSheet = null;
+  render();
+}
+
+function openResult(result) {
+  state.result = result;
+  state.examId = result.examId;
+  state.screen = "result";
+  render();
+}
+
+function openReview() {
+  state.screen = "review";
+  render();
+}
+
+// دکمه بازگشت اندروید: true یعنی خودمان مدیریت کردیم
+window.__handleAndroidBack = function handleAndroidBack() {
+  if (state.confirmSheet) {
+    state.confirmSheet = null;
+    render();
+    return true;
+  }
+  if (state.screen === "exam") {
+    askExitExam();
+    return true;
+  }
+  if (state.screen === "review") {
+    state.screen = "result";
+    render();
+    return true;
+  }
+  if (state.screen === "result") {
+    const found = findExam(state.examId);
+    if (found) goToGroup(found.group.id); else goToHistory();
+    return true;
+  }
+  if (state.screen === "group" || state.screen === "history" || state.screen === "stats" || state.screen === "more") {
+    goHome();
+    return true;
+  }
+  return false;
+};
+
+/* ---------- رندر صفحات ---------- */
+
+function renderTopbar(title, subtitle, onBack) {
+  return el("div", { class: "topbar" }, [
+    el("div", {}, [
+      el("h1", {}, [onBack ? el("button", { class: "icon-btn", onclick: onBack, "aria-label": "بازگشت", text: "→" }) : null, title]),
+      subtitle ? el("div", { class: "sub", text: subtitle }) : null,
+    ]),
+  ]);
+}
+
+/* ---------- ناوبری پایین (مانند اپلیکیشن قیمت دلار و طلا) ---------- */
+
+const NAV_SVG = {
+  home: '<path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
+  history: '<path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+  stats: '<path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>',
+  more: '<path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"/>',
+  bolt: '<path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>',
+};
+
+function navBtn(tab, label, isActive, onClick) {
+  const btn = el("button", {
+    class: `market-nav-btn${isActive ? " is-active" : ""}`,
+    type: "button",
+    onclick: onClick,
+  });
+  btn.innerHTML =
+    `<svg class="market-nav-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">${NAV_SVG[tab]}</svg>` +
+    `<span class="market-nav-label">${label}</span>`;
+  return btn;
+}
+
+function renderBottomNav() {
+  const activeTab =
+    state.screen === "history" ? "history"
+      : state.screen === "stats" ? "stats"
+        : state.screen === "more" ? "more"
+          : "home";
+
+  const fabWrap = el("div", { class: "market-nav-fab-wrap" });
+  const fab = el("button", {
+    class: "market-nav-fab",
+    type: "button",
+    "aria-label": "آزمون سریع",
+    title: "آزمون سریع",
+    onclick: () => {
+      state.confirmSheet = {
+        title: "آزمون سریع",
+        message: "یک آزمون ۲۰ سؤالی ترکیبی و تصادفی از همه رشته‌ها و دروس شروع شود؟ (۲۵ دقیقه، با نمره منفی)",
+        confirmLabel: "شروع آزمون سریع",
+        onConfirm: startQuickExam,
+      };
+      render();
+    },
+  });
+  fab.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">${NAV_SVG.bolt}</svg>`;
+  fabWrap.appendChild(fab);
+
+  return el("nav", { class: "market-bottom-nav", "aria-label": "منوی اصلی" }, [
+    navBtn("home", "خانه", activeTab === "home", goHome),
+    navBtn("history", "کارنامه‌ها", activeTab === "history", goToHistory),
+    fabWrap,
+    navBtn("stats", "آمار", activeTab === "stats", goToStats),
+    navBtn("more", "بیشتر", activeTab === "more", goToMore),
+  ]);
+}
+
+function renderHome() {
+  const results = loadResults();
+  const totalExams = QUESTION_BANK.groups.reduce((n, g) => n + g.exams.length, 0);
+  const totalQuestions = QUESTION_BANK.groups.reduce(
+    (n, g) => n + g.exams.reduce((m, e) => m + e.questions.length, 0), 0);
+  const avg = results.length
+    ? results.reduce((s, r) => s + r.percent, 0) / results.length
+    : null;
+
+  const frag = [
+    renderTopbar(`🎓 ${APP_TITLE}`, "آزمون‌های جامع چهارگزینه‌ای کارشناسی ارشد"),
+    el("div", { class: "stats-row" }, [
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: faNum(totalExams) }),
+        el("div", { class: "lbl", text: "آزمون" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: faNum(totalQuestions) }),
+        el("div", { class: "lbl", text: "سؤال تشریحی‌دار" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: avg == null ? "—" : formatPercent(avg) }),
+        el("div", { class: "lbl", text: "میانگین شما" }),
+      ]),
+    ]),
+    el("div", { class: "section-title" }, [
+      "رشته‌ها و دروس",
+      el("button", { class: "link", onclick: goToHistory, text: `کارنامه‌های من (${faNum(results.length)})` }),
+    ]),
+  ];
+
+  for (const group of QUESTION_BANK.groups) {
+    const examCount = group.exams.length;
+    const qCount = group.exams.reduce((n, e) => n + e.questions.length, 0);
+    frag.push(
+      el("div", { class: "card tappable group-card", onclick: () => goToGroup(group.id) }, [
+        el("div", { class: "emoji", text: group.icon || "📖" }),
+        el("div", { class: "info" }, [
+          el("div", { class: "title" }, [
+            group.title,
+            group.code ? el("span", { class: "badge", text: group.code }) : null,
+          ]),
+          el("div", { class: "desc", text: group.description || "" }),
+          el("div", { class: "meta", text: `${faNum(examCount)} آزمون · ${faNum(qCount)} سؤال` }),
+        ]),
+        el("div", { class: "chev", text: "‹" }),
+      ]),
+    );
+  }
+
+  frag.push(el("div", { class: "footer-note", text: "نمره‌دهی مطابق کنکور سراسری: هر ۳ پاسخ غلط، یک پاسخ صحیح را خنثی می‌کند. سؤالات بر اساس منابع و سرفصل‌های رسمی آزمون کارشناسی ارشد طراحی شده‌اند." }));
+  return frag;
+}
+
+function renderGroup() {
+  const group = findGroup(state.groupId);
+  if (!group) { goHome(); return []; }
+
+  const frag = [renderTopbar(group.title, group.description, goHome)];
+
+  for (const exam of group.exams) {
+    const best = bestScoreFor(exam.id);
+    const bestNode = best == null
+      ? el("span", { class: "best none", text: "هنوز آزمون نداده‌اید" })
+      : el("span", { class: `best ${pctClass(best)}`, text: `بهترین: ${formatPercent(best)}` });
+
+    frag.push(
+      el("div", { class: "card tappable exam-card", onclick: () => startExam(exam.id) }, [
+        el("div", { class: "row1" }, [
+          el("div", { class: "title", text: exam.title }),
+          bestNode,
+        ]),
+        el("div", { class: "meta" }, [
+          el("span", { text: `📝 ${faNum(exam.questions.length)} سؤال` }),
+          el("span", { text: `⏱ ${faNum(exam.durationMinutes)} دقیقه` }),
+          exam.subjectsLabel ? el("span", { text: `📚 ${exam.subjectsLabel}` }) : null,
+        ]),
+      ]),
+    );
+  }
+
+  frag.push(el("div", { class: "footer-note", text: "با لمس هر آزمون، آزمون زمان‌دار آغاز می‌شود." }));
+  return frag;
+}
+
+function renderExam() {
+  const found = findExam(state.examId);
+  if (!found) { goHome(); return []; }
+  const { exam } = found;
+  const q = exam.questions[state.currentIdx];
+  const answered = state.answers.filter((a) => a != null).length;
+
+  const nav = el("div", { class: "qnav" }, exam.questions.map((_, i) => {
+    const classes = ["qbtn"];
+    if (state.answers[i] != null) classes.push("answered");
+    if (i === state.currentIdx) classes.push("current");
+    if (state.flags[i]) classes.push("flagged");
+    return el("button", {
+      class: classes.join(" "),
+      text: faNum(i + 1),
+      onclick: () => { state.currentIdx = i; render(); },
+    });
+  }));
+
+  const reading = q.reading ? (exam.readings || []).find((r) => r.id === q.reading) : null;
+  const latinQ = isMostlyLatin(q.q);
+
+  const options = q.options.map((opt, i) => {
+    const selected = state.answers[state.currentIdx] === i;
+    return el("button", {
+      class: `option${selected ? " selected" : ""}${isMostlyLatin(opt) ? " ltr" : ""}`,
+      onclick: () => {
+        state.answers[state.currentIdx] = selected ? null : i;
+        render();
+      },
+    }, [
+      el("span", { class: "key", text: faNum(i + 1) }),
+      el("span", { text: opt }),
+    ]);
+  });
+
+  const isLast = state.currentIdx === exam.questions.length - 1;
+
+  return [
+    el("div", { class: "exam-head" }, [
+      el("button", { class: "icon-btn", onclick: askExitExam, text: "✕ خروج" }),
+      el("div", { style: "font-size:13px;font-weight:700;flex:1;text-align:center;", text: exam.title }),
+      el("div", { class: `timer${state.remainingSec <= 60 ? " low" : ""}`, id: "examTimer", text: formatClock(state.remainingSec) }),
+    ]),
+    el("div", { class: "progress-track" }, [
+      el("div", { class: "progress-fill", style: `width:${(answered / exam.questions.length) * 100}%` }),
+    ]),
+    nav,
+    el("div", { class: "card" }, [
+      el("span", { class: "subject-tag", text: `${q.subject} · سؤال ${faNum(state.currentIdx + 1)} از ${faNum(exam.questions.length)}` }),
+      reading ? el("div", { class: "reading-box", text: reading.text }) : null,
+      el("div", { class: `question-text${latinQ ? " ltr" : ""}`, text: q.q }),
+      ...options,
+    ]),
+    el("div", { class: "exam-actions" }, [
+      el("button", {
+        class: "btn btn-outline",
+        disabled: state.currentIdx === 0 ? "disabled" : null,
+        onclick: () => { if (state.currentIdx > 0) { state.currentIdx -= 1; render(); } },
+        text: "قبلی",
+      }),
+      el("button", {
+        class: `btn btn-outline flag-btn${state.flags[state.currentIdx] ? " on" : ""}`,
+        onclick: () => { state.flags[state.currentIdx] = !state.flags[state.currentIdx]; render(); },
+        text: state.flags[state.currentIdx] ? "⚑ علامت‌دار" : "⚑ علامت‌گذاری",
+      }),
+      isLast
+        ? el("button", { class: "btn btn-primary", onclick: askFinishExam, text: "پایان آزمون" })
+        : el("button", {
+            class: "btn btn-primary",
+            onclick: () => { state.currentIdx += 1; render(); },
+            text: "بعدی",
+          }),
+    ]),
+    el("button", { class: "btn btn-danger", style: "margin-top:12px;", onclick: askFinishExam, text: "اتمام آزمون و مشاهده کارنامه" }),
+  ];
+}
+
+function renderScoreRing(percent) {
+  const clamped = Math.max(0, Math.min(100, percent));
+  const r = 62;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - clamped / 100);
+  const color = clamped >= 40 ? "var(--accent)" : clamped >= 20 ? "var(--warn)" : "var(--danger)";
+  const ring = el("div", { class: "score-ring" });
+  ring.innerHTML =
+    `<svg width="148" height="148" viewBox="0 0 148 148">` +
+    `<circle cx="74" cy="74" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="11"/>` +
+    `<circle cx="74" cy="74" r="${r}" fill="none" stroke="${color}" stroke-width="11" stroke-linecap="round" ` +
+    `stroke-dasharray="${c}" stroke-dashoffset="${offset}"/>` +
+    `</svg>`;
+  ring.appendChild(el("div", { class: "val" }, [
+    document.createTextNode(formatPercent(percent)),
+    el("small", { text: "با نمره منفی" }),
+  ]));
+  return ring;
+}
+
+function renderResult() {
+  const r = state.result;
+  if (!r) { goHome(); return []; }
+  const verdict = verdictFor(r.percent);
+  const found = findExam(r.examId);
+
+  const subjectRows = r.subjects.map((s) => {
+    const width = Math.max(0, Math.min(100, s.percent));
+    const color = s.percent >= 40 ? "var(--accent)" : s.percent >= 20 ? "var(--warn)" : "var(--danger)";
+    return el("div", { class: "subject-row" }, [
+      el("div", { class: "head" }, [
+        el("span", { text: s.name }),
+        el("span", { class: "pct", text: formatPercent(s.percent) }),
+      ]),
+      el("div", { class: "bar" }, [el("div", { style: `width:${width}%;background:${color}` })]),
+      el("div", { class: "detail", text: `صحیح ${faNum(s.correct)} · غلط ${faNum(s.wrong)} · بی‌پاسخ ${faNum(s.blank)} از ${faNum(s.total)} سؤال` }),
+    ]);
+  });
+
+  return [
+    renderTopbar("کارنامه آزمون", r.examTitle, () => {
+      if (found) goToGroup(found.group.id); else goToHistory();
+    }),
+    el("div", { class: "card score-hero" }, [
+      renderScoreRing(r.percent),
+      el("div", { class: `score-verdict ${verdict.cls}`, text: `${verdict.icon} ${verdict.label}` }),
+      el("div", { class: "score-sub", text: `${r.groupTitle} · ${formatDate(r.date)}${r.timedOut ? " · وقت آزمون تمام شد" : ""}` }),
+    ]),
+    el("div", { class: "result-grid" }, [
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num ok", text: faNum(r.correct) }),
+        el("div", { class: "lbl", text: "صحیح" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num bad", text: faNum(r.wrong) }),
+        el("div", { class: "lbl", text: "غلط" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num blank", text: faNum(r.blank) }),
+        el("div", { class: "lbl", text: "بی‌پاسخ" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num info", text: faNum(r.total) }),
+        el("div", { class: "lbl", text: "کل سؤالات" }),
+      ]),
+    ]),
+    el("div", { class: "section-title" }, ["کارنامه به تفکیک درس"]),
+    el("div", { class: "card" }, subjectRows),
+    (found || r.questionsSnapshot)
+      ? el("button", { class: "btn btn-primary", onclick: openReview, text: "مرور سؤالات و پاسخ‌های تشریحی" })
+      : null,
+    found ? el("button", { class: "btn btn-outline", onclick: () => startExam(r.examId), text: "آزمون مجدد" }) : null,
+    el("button", { class: "btn btn-outline", onclick: goHome, text: "بازگشت به خانه" }),
+  ];
+}
+
+function renderReview() {
+  const r = state.result;
+  if (!r) { goHome(); return []; }
+  const found = findExam(r.examId);
+  // برای آزمون سریع (یا آزمونی که دیگر در بانک نیست) از نسخه ذخیره‌شده در نتیجه استفاده می‌کنیم
+  const exam = found ? found.exam : (r.questionsSnapshot ? { title: r.examTitle, questions: r.questionsSnapshot, readings: [] } : null);
+  if (!exam) { goHome(); return []; }
+
+  const cards = exam.questions.map((q, i) => {
+    const user = r.answers[i];
+    const isBlank = user == null;
+    const isCorrect = user === q.answer;
+    const status = isBlank
+      ? el("span", { class: "review-status blank", text: "بی‌پاسخ" })
+      : isCorrect
+        ? el("span", { class: "review-status ok", text: "صحیح" })
+        : el("span", { class: "review-status bad", text: "غلط" });
+
+    const reading = q.reading ? (exam.readings || []).find((x) => x.id === q.reading) : null;
+
+    const options = q.options.map((opt, oi) => {
+      const classes = ["option"];
+      if (isMostlyLatin(opt)) classes.push("ltr");
+      if (oi === q.answer) classes.push("correct");
+      else if (oi === user) classes.push("wrong");
+      return el("div", { class: classes.join(" ") }, [
+        el("span", { class: "key", text: faNum(oi + 1) }),
+        el("span", { text: opt }),
+      ]);
+    });
+
+    return el("div", { class: "card review-q" }, [
+      el("div", { class: "qhead" }, [
+        el("span", { class: "qnum", text: `سؤال ${faNum(i + 1)} · ${q.subject}` }),
+        status,
+      ]),
+      reading ? el("div", { class: "reading-box", text: reading.text }) : null,
+      el("div", { class: `question-text${isMostlyLatin(q.q) ? " ltr" : ""}`, style: "font-size:14px;", text: q.q }),
+      ...options,
+      el("div", { class: "explanation", html: `<b>پاسخ تشریحی:</b> ` }),
+    ]);
+  });
+
+  // متن تشریحی را امن (بدون HTML خام) اضافه می‌کنیم
+  cards.forEach((card, i) => {
+    const exp = card.querySelector(".explanation");
+    exp.appendChild(document.createTextNode(exam.questions[i].explanation));
+  });
+
+  return [
+    renderTopbar("مرور پاسخ‌ها", r.examTitle, () => { state.screen = "result"; render(); }),
+    ...cards,
+    el("button", { class: "btn btn-outline", onclick: () => { state.screen = "result"; render(); }, text: "بازگشت به کارنامه" }),
+  ];
+}
+
+function renderHistory() {
+  const results = loadResults();
+
+  const items = results.map((r) =>
+    el("div", { class: "card tappable history-item", onclick: () => openResult(r) }, [
+      el("div", { class: "row1" }, [
+        el("div", {}, [
+          el("div", { class: "title", text: r.examTitle }),
+          el("div", { class: "date", text: `${r.groupTitle} · ${formatDate(r.date)}` }),
+        ]),
+        el("div", { class: `pct ${pctClass(r.percent)}`, text: formatPercent(r.percent) }),
+      ]),
+    ]));
+
+  return [
+    renderTopbar("کارنامه‌های من", `${faNum(results.length)} آزمون ثبت‌شده`, goHome),
+    results.length === 0
+      ? el("div", { class: "empty-note", text: "هنوز آزمونی نداده‌اید.\nاز صفحه اصلی یک رشته را انتخاب کنید و اولین آزمون خود را شروع کنید. 🎯" })
+      : null,
+    ...items,
+  ];
+}
+
+function renderStats() {
+  const results = loadResults();
+  const avg = results.length ? results.reduce((s, r) => s + r.percent, 0) / results.length : null;
+  const best = results.length ? Math.max(...results.map((r) => r.percent)) : null;
+
+  const frag = [
+    renderTopbar("آمار پیشرفت", "نمای کلی عملکرد شما در آزمون‌ها", goHome),
+    el("div", { class: "stats-row" }, [
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: faNum(results.length) }),
+        el("div", { class: "lbl", text: "آزمون داده‌شده" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: avg == null ? "—" : formatPercent(avg) }),
+        el("div", { class: "lbl", text: "میانگین درصد" }),
+      ]),
+      el("div", { class: "stat-box" }, [
+        el("div", { class: "num", text: best == null ? "—" : formatPercent(best) }),
+        el("div", { class: "lbl", text: "بهترین درصد" }),
+      ]),
+    ]),
+    el("div", { class: "section-title" }, ["وضعیت هر رشته"]),
+  ];
+
+  for (const group of QUESTION_BANK.groups) {
+    const rows = group.exams.map((exam) => {
+      const bestPct = bestScoreFor(exam.id);
+      const attempts = loadResults().filter((r) => r.examId === exam.id).length;
+      const width = bestPct == null ? 0 : Math.max(0, Math.min(100, bestPct));
+      const color = bestPct == null ? "var(--surface-2)"
+        : bestPct >= 40 ? "var(--accent)" : bestPct >= 20 ? "var(--warn)" : "var(--danger)";
+      return el("div", { class: "subject-row" }, [
+        el("div", { class: "head" }, [
+          el("span", { text: exam.title }),
+          el("span", { class: "pct", text: bestPct == null ? "—" : formatPercent(bestPct) }),
+        ]),
+        el("div", { class: "bar" }, [el("div", { style: `width:${width}%;background:${color}` })]),
+        el("div", { class: "detail", text: attempts ? `${faNum(attempts)} بار آزمون داده‌اید` : "هنوز آزمون نداده‌اید" }),
+      ]);
+    });
+
+    frag.push(
+      el("div", { class: "card" }, [
+        el("div", { style: "font-weight:700;font-size:14px;margin-bottom:12px;", text: `${group.icon || "📖"} ${group.title}` }),
+        ...rows,
+      ]),
+    );
+  }
+
+  return frag;
+}
+
+function appVersionLabel() {
+  try {
+    if (typeof AndroidApp !== "undefined" && AndroidApp.getContentVersion) {
+      return AndroidApp.getContentVersion();
+    }
+  } catch (e) { /* - */ }
+  return (typeof APP_UPDATE_CONFIG !== "undefined" && APP_UPDATE_CONFIG.currentVersion) || "—";
+}
+
+function renderMore() {
+  const themeRow = el("button", { class: "market-more-row", type: "button", onclick: toggleTheme }, [
+    el("span", { class: "market-more-row-label", text: "تم اپلیکیشن" }),
+    el("span", { class: "market-more-row-value", id: "themeToggleValue", text: currentTheme() === "light" ? "تم روشن" : "تم تاریک" }),
+  ]);
+
+  const copyright = el("p", { class: "market-more-copyright" });
+  copyright.innerHTML =
+    'طراحی و توسعه توسط <a href="https://t.me/m3hdi_v1" target="_blank" rel="noopener noreferrer" dir="ltr" class="accent">m3hdi_v1</a> | ' +
+    `<span id="currentYear">${new Date().getFullYear()}</span> &copy;`;
+
+  return [
+    renderTopbar("بیشتر", null, goHome),
+    el("section", { class: "market-more-section" }, [
+      el("h3", { class: "market-more-section-title", text: "ظاهر" }),
+      themeRow,
+    ]),
+    el("section", { class: "market-more-section" }, [
+      el("h3", { class: "market-more-section-title", text: "آزمون" }),
+      el("div", { class: "market-more-row market-more-row-static" }, [
+        el("span", { class: "market-more-row-label", text: "تعداد آزمون‌ها" }),
+        el("span", { class: "market-more-row-value", text: faNum(QUESTION_BANK.groups.reduce((n, g) => n + g.exams.length, 0)) }),
+      ]),
+      el("div", { class: "market-more-row market-more-row-static" }, [
+        el("span", { class: "market-more-row-label", text: "تعداد سؤالات" }),
+        el("span", { class: "market-more-row-value", text: faNum(QUESTION_BANK.groups.reduce((n, g) => n + g.exams.reduce((m, e) => m + e.questions.length, 0), 0)) }),
+      ]),
+      el("p", { class: "market-more-hint", text: "نمره‌دهی مطابق کنکور سراسری است: هر ۳ پاسخ غلط، یک پاسخ صحیح را خنثی می‌کند." }),
+    ]),
+    el("section", { class: "market-more-section", id: "appUpdateSection" }, [
+      el("h3", { class: "market-more-section-title", text: "درباره" }),
+      el("div", { class: "market-more-row market-more-row-static" }, [
+        el("span", { class: "market-more-row-label", text: "نسخه اپلیکیشن" }),
+        el("span", { class: "market-more-row-value", id: "appContentVersion", text: appVersionLabel() }),
+      ]),
+      el("p", { class: "market-more-hint", text: "بروزرسانی‌ها به‌صورت خودکار بررسی می‌شوند و در صورت وجود نسخه جدید، از شما تأیید گرفته می‌شود." }),
+    ]),
+    copyright,
+  ];
+}
+
+function renderConfirmSheet() {
+  const sheet = state.confirmSheet;
+  if (!sheet) return null;
+  return el("div", {
+    class: "sheet-backdrop",
+    onclick: (ev) => {
+      if (ev.target.classList.contains("sheet-backdrop")) {
+        state.confirmSheet = null;
+        render();
+      }
+    },
+  }, [
+    el("div", { class: "sheet" }, [
+      el("h3", { text: sheet.title }),
+      el("p", { text: sheet.message }),
+      el("button", {
+        class: `btn ${sheet.danger ? "btn-danger" : "btn-primary"}`,
+        onclick: () => { const fn = sheet.onConfirm; state.confirmSheet = null; fn(); },
+        text: sheet.confirmLabel,
+      }),
+      el("button", {
+        class: "btn btn-outline",
+        onclick: () => { state.confirmSheet = null; render(); },
+        text: "انصراف",
+      }),
+    ]),
+  ]);
+}
+
+function render() {
+  appEl.innerHTML = "";
+  let nodes = [];
+  if (state.screen === "home") nodes = renderHome();
+  else if (state.screen === "group") nodes = renderGroup();
+  else if (state.screen === "exam") nodes = renderExam();
+  else if (state.screen === "result") nodes = renderResult();
+  else if (state.screen === "review") nodes = renderReview();
+  else if (state.screen === "history") nodes = renderHistory();
+  else if (state.screen === "stats") nodes = renderStats();
+  else if (state.screen === "more") nodes = renderMore();
+
+  for (const node of nodes) {
+    if (node) appEl.appendChild(node);
+  }
+
+  // ناوبری پایین در همه صفحات به‌جز حین آزمون
+  const navVisible = state.screen !== "exam";
+  document.body.classList.toggle("has-bottom-nav", navVisible);
+  if (navVisible) appEl.appendChild(renderBottomNav());
+
+  const sheetNode = renderConfirmSheet();
+  if (sheetNode) appEl.appendChild(sheetNode);
+
+  if (state.screen !== "exam") window.scrollTo(0, 0);
+}
+
+applyTheme(currentTheme());
+render();
+
+  </script>
+  <script>
+(function () {
+  // پل بروزرسانی اندروید — پورت‌شده از اپلیکیشن قیمت دلار و طلا (market-prices)
+  // Kotlin از طریق window.__onAppUpdate* با این اسکریپت صحبت می‌کند.
+
+  const UPDATE_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+  let audioCtx = null;
+  const UPDATE_SUCCESS_SOUND_KEY = "azmoon-arshad-play-update-success";
+
+  function updateArgs() {
+    return [
+      APP_UPDATE_CONFIG.repoOwner,
+      APP_UPDATE_CONFIG.repoName,
+      APP_UPDATE_CONFIG.branch,
+    ];
+  }
+
+  function getAudioContext() {
+    try {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === "suspended") audioCtx.resume().catch(function () {});
+      return audioCtx;
+    } catch {
+      return null;
+    }
+  }
+
+  function playNotificationTone(sequence) {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const master = ctx.createGain();
+    master.gain.value = 0.18;
+    master.connect(ctx.destination);
+    let t = ctx.currentTime + 0.02;
+    sequence.forEach(function (note) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = note.type || "sine";
+      osc.frequency.value = note.freq;
+      osc.connect(gain);
+      gain.connect(master);
+      const dur = note.dur || 0.14;
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.85, t + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur + 0.03);
+      t += note.gap != null ? note.gap : dur * 0.62;
+    });
+  }
+
+  function playUpdateAvailableSound() {
+    playNotificationTone([
+      { freq: 880, dur: 0.1, gap: 0.08, type: "sine" },
+      { freq: 1174.66, dur: 0.14, gap: 0.06, type: "sine" },
+      { freq: 1567.98, dur: 0.18, type: "triangle" },
+    ]);
+  }
+
+  function playUpdateCompleteSound() {
+    playNotificationTone([
+      { freq: 523.25, dur: 0.08, gap: 0.06, type: "sine" },
+      { freq: 659.25, dur: 0.08, gap: 0.06, type: "sine" },
+      { freq: 783.99, dur: 0.1, gap: 0.06, type: "triangle" },
+      { freq: 1046.5, dur: 0.2, type: "sine" },
+    ]);
+  }
+
+  function markUpdateSuccessSound() {
+    try { sessionStorage.setItem(UPDATE_SUCCESS_SOUND_KEY, "1"); } catch {}
+  }
+
+  function playUpdateSuccessSoundIfPending() {
+    try {
+      if (sessionStorage.getItem(UPDATE_SUCCESS_SOUND_KEY) !== "1") return;
+      sessionStorage.removeItem(UPDATE_SUCCESS_SOUND_KEY);
+    } catch {
+      return;
+    }
+    window.setTimeout(playUpdateCompleteSound, 350);
+  }
+
+  function initUpdatePrompt() {
+    if (typeof AndroidApp === "undefined" || typeof APP_UPDATE_CONFIG === "undefined") return;
+
+    const overlay = document.getElementById("updateSheetOverlay");
+    const sheet = document.getElementById("updateSheet");
+    const titleEl = document.getElementById("updateSheetTitle");
+    const messageEl = document.getElementById("updateSheetMessage");
+    const confirmBtn = document.getElementById("updateSheetConfirmBtn");
+    const progressWrap = document.getElementById("updateSheetProgress");
+    const progressFill = document.getElementById("updateSheetProgressFill");
+    const progressLabel = document.getElementById("updateSheetProgressLabel");
+    const progressPercent = document.getElementById("updateSheetProgressPercent");
+    if (!overlay || !sheet || !messageEl || !confirmBtn) return;
+
+    let isDownloading = false;
+    let fakeProgressTimer = null;
+    const persianDigitsMap = "۰۱۲۳۴۵۶۷۸۹";
+    const toFa = function (n) {
+      return String(n).replace(/\d/g, function (d) { return persianDigitsMap[+d]; });
+    };
+
+    function syncVersionDisplay(version) {
+      const versionEl = document.getElementById("appContentVersion");
+      if (versionEl && version) versionEl.textContent = version;
+    }
+
+    function notifySheetOpen(open) {
+      try { AndroidApp.setUpdateSheetOpen(open); } catch {}
+    }
+
+    function stopFakeProgress() {
+      if (fakeProgressTimer) {
+        window.clearInterval(fakeProgressTimer);
+        fakeProgressTimer = null;
+      }
+    }
+
+    function startFakeProgress() {
+      stopFakeProgress();
+      let value = 4;
+      fakeProgressTimer = window.setInterval(function () {
+        if (!isDownloading) {
+          stopFakeProgress();
+          return;
+        }
+        value = Math.min(90, value + Math.max(1, Math.round((90 - value) * 0.08)));
+        setProgress(value, "در حال دریافت بروزرسانی...");
+      }, 450);
+    }
+
+    function setProgress(percent, label) {
+      const value = Math.max(0, Math.min(100, Math.round(percent || 0)));
+      if (progressFill) progressFill.style.width = value + "%";
+      if (progressPercent) progressPercent.textContent = toFa(value) + "٪";
+      if (progressLabel && label) progressLabel.textContent = label;
+    }
+
+    function enterDownloadingState() {
+      isDownloading = true;
+      sheet.classList.add("downloading");
+      if (progressWrap) progressWrap.classList.remove("hidden");
+      if (titleEl) titleEl.textContent = "در حال بروزرسانی";
+      messageEl.textContent = "لطفاً صبر کنید تا دریافت نسخه جدید کامل شود.";
+      setProgress(0, "شروع دریافت فایل‌ها...");
+      startFakeProgress();
+      confirmBtn.disabled = true;
+    }
+
+    function exitDownloadingState() {
+      isDownloading = false;
+      stopFakeProgress();
+      sheet.classList.remove("downloading");
+      confirmBtn.disabled = false;
+    }
+
+    function ensureUpdateSheetVisible() {
+      overlay.classList.remove("hidden");
+      requestAnimationFrame(function () {
+        overlay.classList.add("open");
+        notifySheetOpen(true);
+        overlay.setAttribute("aria-hidden", "false");
+      });
+    }
+
+    function showUpdateSheet(latestVersion, currentVersion, updateKind) {
+      if (isDownloading) return;
+      if (overlay.classList.contains("open") && sheet.classList.contains("downloading")) return;
+
+      overlay.dataset.latestVersion = latestVersion;
+      overlay.dataset.updateKind = updateKind || "content";
+      if (titleEl) {
+        titleEl.textContent = updateKind === "apk"
+          ? "نسخه جدید اپلیکیشن موجود است"
+          : "بروزرسانی محتوا موجود است";
+      }
+      messageEl.textContent = updateKind === "apk"
+        ? ("نسخه " + latestVersion + " منتشر شده است. نسخه فعلی شما " + currentVersion + " است. با تأیید، کل اپلیکیشن (همراه با بانک سؤالات) بروزرسانی می‌شود.")
+        : ("نسخه " + latestVersion + " منتشر شده است. نسخه فعلی شما " + currentVersion + " است. فقط محتوای داخل اپ (بانک سؤالات) بروزرسانی می‌شود.");
+      if (progressWrap) progressWrap.classList.add("hidden");
+      sheet.classList.remove("downloading");
+      confirmBtn.textContent = updateKind === "apk" ? "بروزرسانی اپلیکیشن" : "بروزرسانی محتوا";
+      confirmBtn.disabled = false;
+      ensureUpdateSheetVisible();
+      playUpdateAvailableSound();
+    }
+
+    function startUpdateDownload() {
+      if (isDownloading) return;
+      ensureUpdateSheetVisible();
+      enterDownloadingState();
+      try {
+        AndroidApp.startAppUpdate.apply(AndroidApp, updateArgs());
+      } catch (err) {
+        exitDownloadingState();
+        if (progressWrap) progressWrap.classList.remove("hidden");
+        if (titleEl) titleEl.textContent = "خطا در بروزرسانی";
+        messageEl.textContent = "شروع دریافت ممکن نشد. دوباره تلاش کنید.";
+        confirmBtn.textContent = "تلاش مجدد";
+        confirmBtn.disabled = false;
+      }
+    }
+
+    window.__startAppUpdateFromSheet = startUpdateDownload;
+
+    window.__onAppUpdateProgress = function (progress) {
+      if (!progress) return;
+      stopFakeProgress();
+      const percent = Number(progress.percent) || 0;
+      const done = Number(progress.done) || 0;
+      const total = Number(progress.total) || 0;
+      const label = progress.label
+        || (total > 0
+          ? ("دریافت فایل " + toFa(Math.min(Math.max(done, 1), total)) + " از " + toFa(total))
+          : "در حال دریافت بروزرسانی...");
+      if (!sheet.classList.contains("downloading")) enterDownloadingState();
+      setProgress(percent, label);
+    };
+
+    window.__onAppUpdateComplete = function (result) {
+      stopFakeProgress();
+
+      if (result && result.needsInstallPermission) {
+        isDownloading = true;
+        sheet.classList.add("downloading");
+        if (progressWrap) progressWrap.classList.remove("hidden");
+        if (titleEl) titleEl.textContent = "مجوز نصب اندروید";
+        messageEl.textContent = (result && result.message)
+          || "یک‌بار اجازه نصب را در تنظیمات فعال کنید. پس از بازگشت، بروزرسانی خودکار ادامه می‌یابد.";
+        setProgress(0, "در انتظار فعال‌سازی مجوز...");
+        confirmBtn.textContent = "باز کردن تنظیمات";
+        confirmBtn.disabled = false;
+        return;
+      }
+
+      if (!result || !result.success) {
+        exitDownloadingState();
+        if (progressWrap) progressWrap.classList.remove("hidden");
+        if (titleEl) titleEl.textContent = "خطا در بروزرسانی";
+        messageEl.textContent = (result && result.message) || "دریافت نسخه جدید ناموفق بود.";
+        setProgress(0, "لطفاً دوباره تلاش کنید");
+        confirmBtn.textContent = "تلاش مجدد";
+        confirmBtn.disabled = false;
+        return;
+      }
+
+      if (result.awaitingInstall) {
+        isDownloading = true;
+        sheet.classList.add("downloading");
+        if (progressWrap) progressWrap.classList.remove("hidden");
+        if (titleEl) titleEl.textContent = "تأیید نصب";
+        messageEl.textContent = result.message || "در حال نصب نسخه جدید. در صورت نیاز، نصب را در صفحه سیستم تأیید کنید.";
+        setProgress(100, "در انتظار نصب...");
+        return;
+      }
+
+      setProgress(100, "بروزرسانی کامل شد");
+      if (titleEl) titleEl.textContent = "بروزرسانی موفق";
+      messageEl.textContent = result.message || "نسخه جدید با موفقیت دریافت شد.";
+      if (result.latestVersion) syncVersionDisplay(result.latestVersion);
+      if (result.success && result.reloaded) {
+        messageEl.textContent = "نسخه جدید نصب شد. در حال بارگذاری مجدد...";
+        markUpdateSuccessSound();
+        playUpdateCompleteSound();
+      }
+      if (result.updateKind === "apk" && result.success && !result.awaitingInstall) {
+        exitDownloadingState();
+        confirmBtn.textContent = "تلاش مجدد";
+      }
+    };
+
+    window.__onAppUpdateCheckComplete = function (result) {
+      if (isDownloading) return;
+      if (!result || !result.success || !result.hasUpdate) return;
+      showUpdateSheet(result.latestVersion, result.currentVersion, result.updateKind);
+    };
+
+    confirmBtn.addEventListener("click", function () {
+      startUpdateDownload();
+    });
+
+    function runUpdateCheck() {
+      if (isDownloading) return;
+      try {
+        AndroidApp.checkForAppUpdate.apply(AndroidApp, updateArgs());
+      } catch {}
+    }
+
+    window.setTimeout(runUpdateCheck, 12000);
+    window.setInterval(runUpdateCheck, UPDATE_CHECK_INTERVAL_MS);
+  }
+
+  try { localStorage.removeItem("azmoon-arshad-update-dismissed"); } catch {}
+
+  playUpdateSuccessSoundIfPending();
+  initUpdatePrompt();
+})();
+
+  </script>
+</body>
+</html>
